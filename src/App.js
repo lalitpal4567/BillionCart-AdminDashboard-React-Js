@@ -1,4 +1,4 @@
-import AppNavigation from "./components/AppNavigation";
+import AppNavigation from "./AppNavigation";
 
 
 function App() {

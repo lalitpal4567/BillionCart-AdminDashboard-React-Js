@@ -1,0 +1,28 @@
+/* AdminDashboard.css */
+.grid-container {
+  display: flex;
+  flex-direction: row;
+  transition: all 0.3s ease;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #f8f9fa;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-hidden {
+  transform: translateX(-100%);
+  /* display: none; */
+  /* width: 0; */
+}
+
+.content {
+  flex-grow: 1;
+  padding: 10px;
+  transition: margin-left 0.3s ease;
+}
+
+.content-expanded {
+  margin-left: 0;
+}
