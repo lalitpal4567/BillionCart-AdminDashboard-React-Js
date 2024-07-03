@@ -1,0 +1,26 @@
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
+    line-height: 1.5em;
+}
+/* Add these styles in your CSS file */
+
+.card {
+    position: relative;
+    /* overflow: hidden; */
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.4); /* Zoom in the image */
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .card-body {
+    opacity: 0; /* Hide the rest of the card */
+    transition: opacity 0.3s ease-in-out;
+}

@@ -1,0 +1,9 @@
+.subcategory-card-container{
+
+}
+@media (min-width: 200px) {
+    .subcategory-card-container{
+        row-gap: 60px;
+        column-gap: 20px;
+    }
+}

@@ -1,0 +1,15 @@
+.input-checkbox{
+    width: 17px;
+    height: 17px;
+}
+.input-checkbox:hover{
+    outline: 3px solid dodgerblue;
+    outline-offset: -4px;
+}
+.checkbox-label{
+    margin-left: 5px;
+}
+.checkbox-label:hover{
+    color: rgb(202, 131, 0);
+    cursor: pointer;
+}

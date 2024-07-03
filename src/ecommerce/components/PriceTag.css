@@ -1,0 +1,26 @@
+
+.priceDetails {
+    margin: '5px 0';
+}
+
+.label {
+    font-size: 15px;
+    text-decoration: line-through;
+
+}
+
+.currentPrice {
+    color: '#28a745';
+    font-weight: bold;
+}
+
+.previousPrice {
+    text-decoration: 'line-through';
+    color: '#dc3545';
+}
+
+.discount{
+    color: skyblue;
+    font-size: 15px;
+    font-weight: bold;
+}
