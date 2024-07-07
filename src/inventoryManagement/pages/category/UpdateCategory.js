@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -12,17 +12,13 @@ import Spinner from '../../components/Spinner';
 const UpdateCategory = () => {
   const [loading, setLoading] = useState(false);
   const [initialCategory, setInitialCategory] = useState(null);
-
-  const [category, setCategory] = useState({
-    categoryId: "",
-    name: "",
-    description: "",
-    imageUrl: "",
-    altText: ""
-  });
+  const [imageFile, setImageFile] = useState(null);
+  const [category, setCategory] = useState();
+  const [imageUrl, setImageUrl] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const token = localStorage.getItem('token');
 
   const fetchCategoryById = async () => {
@@ -35,8 +31,13 @@ const UpdateCategory = () => {
         }
       })
       setLoading(false);
-      setCategory(res.data.Category);
-      setInitialCategory(res.data.Category);
+      setCategory({
+        name: res.data.Category?.name,
+        description: res.data.Category?.description,
+        altText: res.data.Category?.altText
+      });
+      setImageUrl(res.data.Category?.imageUrl);
+      setInitialCategory(category);
     } catch (error) {
       console.log("Error while fetching category: ", error);
       setLoading(false);
@@ -47,7 +48,7 @@ const UpdateCategory = () => {
     fetchCategoryById();
   }, [])
 
-  const handleInputChange = (e) => {
+  const handleCategoryInputChange = (e) => {
     const { name, value } = e.target;
     setCategory(prevState => ({
       ...prevState,
@@ -55,14 +56,24 @@ const UpdateCategory = () => {
     }));
   };
 
+  const handleCategoryImageInputChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+  }
+
   const handleUpdateCategory = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append('category', new Blob([JSON.stringify(category)], { type: 'application/json' }));
+    formData.append('imageFile', imageFile);
+
     try {
-      const req = await axios.put(`http://localhost:9090/api/v1/admin/category/update-category/${id}`, category, {
+      const req = await axios.put(`http://localhost:9090/api/v1/admin/category/update-category/${id}`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         }
       });
       setLoading(false);
@@ -77,6 +88,10 @@ const UpdateCategory = () => {
   const handleReset = () => {
     if (initialCategory) {
       setCategory(initialCategory);
+    }
+    setImageFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -110,8 +125,8 @@ const UpdateCategory = () => {
                 aria-describedby="categoryHelp"
                 required
                 className="form-control"
-                value={category.name}
-                onChange={handleInputChange}
+                value={category?.name}
+                onChange={handleCategoryInputChange}
               />
             </div>
             <div className="mb-3">
@@ -122,34 +137,45 @@ const UpdateCategory = () => {
                 id="inputDescription"
                 name="description"
                 required
-                value={category.description}
+                value={category?.description}
                 rows="4"
                 style={{ resize: 'none' }}
-                onChange={handleInputChange}
+                onChange={handleCategoryInputChange}
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="inputImageUrl" className="form-label">Image Url</label>
-              <input
-                type="text"
-                className="form-control"
-                id="inputImageUrl"
-                name="imageUrl"
-                value={category.imageUrl}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="inputAltText" className="form-label">Alt text</label>
-              <input
-                type="text"
-                className="form-control"
-                id="inputAltText"
-                name="altText"
-                required
-                value={category.altText}
-                onChange={handleInputChange}
-              />
+            <div className=' bg-light rounded rounded-3 p-2 mb-2 border border-3 border-light-subtle'>
+              <div className="mb-2">
+                <label htmlFor="inputImageFile" className="form-label">Image File</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="inputImageFile"
+                  name="imageFile"
+                  ref={fileInputRef}
+                  accept="image/jpg, image/jpeg, image/png"
+                  onChange={handleCategoryImageInputChange}
+                />
+              </div>
+              <div className=' d-flex justify-content-between flex-wrap pt-2'>
+                <div className="mb-3">
+                  <label htmlFor="inputAltText" className="form-label">Alt Text</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="inputAltText"
+                    name="altText"
+                    value={category?.altText}
+                    onChange={handleCategoryInputChange}
+                  />
+                </div>
+                <div className='' style={{ width: "200px", height: "120px" }}>
+                  <img
+                    src={imageFile ? URL.createObjectURL(imageFile) : imageUrl}
+                    className=' object-fit-cover w-100 h-100'
+                    alt='image'
+                  />
+                </div>
+              </div>
             </div>
             <div className='d-flex justify-content-center gap-4'>
               <button type="button" className="btn px-4" onClick={handleReset} style={{ backgroundColor: "orange" }}>reset</button>
@@ -158,7 +184,7 @@ const UpdateCategory = () => {
           </form>
         </div>
       }
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   )
 }

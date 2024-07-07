@@ -4,23 +4,28 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-clamp: 2;
     height: 3em;
     line-height: 1.5em;
 }
-/* Add these styles in your CSS file */
 
-.card {
-    position: relative;
-    /* overflow: hidden; */
-    transition: all 0.3s ease-in-out;
+.card-img-top {
+    transition: transform 0.3s ease;
 }
 
-.card:hover .card-img-top {
-    transform: scale(1.4); /* Zoom in the image */
-    transition: transform 0.3s ease-in-out;
+.card-img-top:hover {
+    transform: scale(1.4);
+    transform-origin: top;
 }
 
-.card:hover .card-body {
-    opacity: 0; /* Hide the rest of the card */
-    transition: opacity 0.3s ease-in-out;
+.hide-over-hover {
+    visibility: hidden;
+
+    .price-tag {
+        display: none;
+    }
+}
+
+.card-box:hover {
+  background-color: #f5f5f5;
 }

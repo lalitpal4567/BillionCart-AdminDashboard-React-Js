@@ -1,8 +1,8 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast, useToast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import BackButton from '../../components/BackButton';
@@ -12,14 +12,19 @@ const AddSubcategory = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState(null);
+  const [imageFiles, setImageFiles] = useState([{ imageFile: null }]);
+  const [altTexts, setAltTexts] = useState([{
+    altText: ""
+  }])
+
   const [subcategory, setSubcategory] = useState({
     name: '',
-    description: '',
-    subcategoryImages: [{ imageUrl: '', description: '', altText: '' }]
+    description: ''
   });
 
   const pageSize = 10;
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const token = localStorage.getItem('token');
 
   const fetchCategories = async () => {
@@ -50,13 +55,25 @@ const AddSubcategory = () => {
   const addSubcategory = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const formData = new FormData();
+    const newSubcategory = { ...subcategory, altTexts };
+
+    formData.append('subcategory', new Blob([JSON.stringify(newSubcategory)], { type: 'application/json' }));
+    imageFiles.forEach((file) => {
+      if (file.imageFile) {
+        formData.append('imageFiles', file.imageFile);
+      }
+    });
+
     try {
-      const res = await axios.post(`http://localhost:9090/api/v1/admin/subcategory/add-subcategory/${categoryId}`, subcategory, {
+      const res = await axios.post(`http://localhost:9090/api/v1/admin/subcategory/add-subcategory/${categoryId}`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         }
       })
+
       setLoading(false);
       toast.success("Subcategory added successfully!");
       setTimeout(() => navigate("/subcategory"), 2000);
@@ -67,7 +84,7 @@ const AddSubcategory = () => {
     }
   }
 
-  const handleInputChange = (e) => {
+  const handleSubcategoryInputChange = (e) => {
     const { name, value } = e.target;
     setSubcategory(prevState => ({
       ...prevState,
@@ -77,45 +94,50 @@ const AddSubcategory = () => {
 
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
-    handleReset();
+    // handleReset();
   };
 
-  const handleAddImage = () => {
-    setSubcategory(prevState => ({
-      ...prevState,
-      subcategoryImages: [...prevState.subcategoryImages, { imageUrl: '', description: '', altText: '' }]
-    }));
+  const handleAddImageField = () => {
+    setImageFiles([...imageFiles, { imageFile: null }]);
+    setAltTexts([...altTexts, { altText: "" }])
   };
 
-  const handleRemoveImage = (index) => {
-    setSubcategory(prevState => ({
-      ...prevState,
-      subcategoryImages: prevState.subcategoryImages.filter((_, i) => i !== index)
-    }));
+  const handleRemoveImageField = (index) => {
+    const updatedImageFiles = imageFiles.filter((_, i) => i !== index);
+    const updatedAltTexts = altTexts.filter((_, i) => i !== index);
+    setImageFiles(updatedImageFiles);
+    setAltTexts(updatedAltTexts);
   };
 
-  const handleImageChange = (index, e) => {
-    const { name, value } = e.target;
-    const images = [...subcategory.subcategoryImages];
-    images[index][name] = value;
-    setSubcategory(prevState => ({
-      ...prevState,
-      subcategoryImages: images
-    }));
+  const handleSubcategoryImageAltTextInputChange = (index, e) => {
+    const {type, value, files } = e.target;
+    const newImageFiles = [...imageFiles];
+    const newAltTexts = [...altTexts];
+    
+    if(type === "file"){
+      newImageFiles[index] = { ...newImageFiles[index], imageFile: files[0] };
+    }
+    if(type === "text"){
+      newAltTexts[index] = {...newAltTexts[index], altText: value};
+    }
+    setImageFiles(newImageFiles);
+    setAltTexts(newAltTexts);
   };
 
   const handleReset = () => {
     setSubcategory({
       name: '',
       description: '',
-      subcategoryImages: [{ imageUrl: '', description: '', altText: '' }]
     });
+    setImageFiles({
+      imageFile: null
+    })
   }
 
   return (
     <div className=' p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/category" className="" />
+        <BackButton to="/subcategory" className="" />
         <h1 className='text-center mx-auto'>Add Subcategory</h1>
       </div>
       {loading ? <Spinner /> :
@@ -130,7 +152,7 @@ const AddSubcategory = () => {
                 onChange={handleCategoryChange}
                 className=' mb-3 form-control mt-2'
               >
-                <option value="" style={{backgroundColor: "#9DB2BF"}}>--Select Category--</option>
+                <option value="" style={{ backgroundColor: "#9DB2BF" }}>--Select Category--</option>
                 {
                   categories.map((category, index) => {
                     return (
@@ -151,7 +173,7 @@ const AddSubcategory = () => {
                     name="name"
                     value={subcategory.name}
                     required
-                    onChange={handleInputChange}
+                    onChange={handleSubcategoryInputChange}
                     aria-describedby="subcategoryHelp"
                     className="form-control"
                   />
@@ -165,7 +187,7 @@ const AddSubcategory = () => {
                     rows="3"
                     required
                     style={{ resize: 'none' }}
-                    onChange={handleInputChange}
+                    onChange={handleSubcategoryInputChange}
                     aria-describedby="descriptionHelp"
                     className="form-control"
                   />
@@ -173,34 +195,48 @@ const AddSubcategory = () => {
 
                 <div className="mb-3">
                   <label className="form-label">Image</label>
-                  {subcategory.subcategoryImages.map((image, index) => (
-                    <div key={index} className=' bg-light mb-3 p-2 rounded rounded-3 border border-3 border-light-subtle'>
-                      <div className='mb-3'>
-                        <label htmlFor='inputImageUrl'>Image Url</label>
-                        <input
-                          type="text"
-                          className="form-control mb-1"
-                          name="imageUrl"
-                          value={image.imageUrl}
-                          onChange={(e) => handleImageChange(index, e)}
-                        />
+                  {
+                    imageFiles.map((image, index) => (
+                      <div key={index} className=' bg-light rounded rounded-3 p-2 mb-2 border border-3 border-light-subtle'>
+                        <div className="mb-2">
+                          <label htmlFor="inputImageFile" className="form-label">Image File</label>
+                          <input
+                            type="file"
+                            className="form-control"
+                            id="inputImageFile"
+                            name="imageFile"
+                            ref={fileInputRef}
+                            accept="image/jpg, image/jpeg, image/png"
+                            onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
+                          />
+                        </div>
+                        <div className=' d-flex justify-content-between flex-wrap pt-2'>
+                          <div className="mb-3">
+                            <label htmlFor="inputAltText" className="form-label">Alt Text</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="inputAltText"
+                              name="altText"
+                              value={altTexts[index].altText || ""}
+                              onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
+
+                            />
+                          </div>
+                          <div className='' style={{ width: "200px", height: "120px" }}>
+                            <img
+                              src={image.imageFile ? URL.createObjectURL(image.imageFile) : '/images/image_photo.jpg'}
+                              className=' object-fit-cover w-100 h-100'
+                              alt='image'
+                            />
+                          </div>
+                        </div>
+                        {index !== 0 && (
+                          <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveImageField(index)}>Remove</button>
+                        )}
                       </div>
-                      <div className='mb-3'>
-                        <label htmlFor='inputAltText'>Alt Text</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="altText"
-                          value={image.altText}
-                          onChange={(e) => handleImageChange(index, e)}
-                        />
-                      </div>
-                      {index !== 0 && (
-                        <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveImage(index)}>Remove</button>
-                      )}
-                    </div>
-                  ))}
-                  <button type="button" className="btn btn-primary" onClick={handleAddImage}>Add more</button>
+                    ))}
+                  <button type="button" className="btn btn-primary" onClick={handleAddImageField}>Add more</button>
                 </div>
                 <div className='d-flex justify-content-center gap-4'>
                   <button type="button" className="btn px-4" onClick={handleReset} style={{ backgroundColor: "orange" }}>Reset</button>

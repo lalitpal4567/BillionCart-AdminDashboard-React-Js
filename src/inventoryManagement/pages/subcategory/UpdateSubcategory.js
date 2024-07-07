@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import BackButton from '../../components/BackButton';
 import Spinner from '../../components/Spinner';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateSubcategory = () => {
   const [loading, setLoading] = useState(false);
   const [initialSubcategory, setInitialSubcategory] = useState([]);
-  const [initialSubcategoryImages, setInitialSubcategoryImages] = useState([]);
   const [fetchedSubcategory, setFetchedSubcategory] = useState({});
   const [subcategory, setSubcategory] = useState({});
-  const [subcategoryImages, setSubcategoryImages] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -37,15 +35,8 @@ const UpdateSubcategory = () => {
         description: subcategory?.description
       };
 
-      const transformedSubcategoryImages = subcategory?.subcategoryImages.map(image => ({
-        imageUrl: image?.imageUrl,
-        altText: image?.altText
-      }))
-
       setSubcategory(transformedSubcategory);
-      setSubcategoryImages(transformedSubcategoryImages)
       setInitialSubcategory(transformedSubcategory);
-      setInitialSubcategoryImages(transformedSubcategoryImages);
     } catch (error) {
       console.log("Error while fetching subcategory: ", error);
       setLoading(false);
@@ -60,8 +51,7 @@ const UpdateSubcategory = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const combinedSubcategory = { subcategory, subcategoryImages };
-      const res = await axios.put(`http://localhost:9090/api/v1/admin/subcategory/update-subcategory/${id}`, combinedSubcategory, {
+      const res = await axios.put(`http://localhost:9090/api/v1/admin/subcategory/update-subcategory/${id}`, subcategory, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -85,27 +75,8 @@ const UpdateSubcategory = () => {
     }));
   };
 
-  const handleAddImage = () => {
-    setSubcategoryImages(prevState => [
-      ...prevState,
-      { imageUrl: '', altText: '' }
-    ]);
-  };
-
-  const handleRemoveImage = (index) => {
-    setSubcategoryImages(prevState => prevState.filter((_, i) => i !== index))
-  };
-
-  const handleSubcategoryImageChange = (index, e) => {
-    const { name, value } = e.target;
-    const images = [...subcategoryImages];
-    images[index][name] = value;
-    setSubcategoryImages(images);
-  };
-
   const handleReset = () => {
     setSubcategory(initialSubcategory);
-    setSubcategoryImages(initialSubcategoryImages);
   }
 
   return (
@@ -167,48 +138,15 @@ const UpdateSubcategory = () => {
                 onChange={handleSubcategoryInputChange}
               />
             </div>
-            <div className="mb-3">
-              <label className="form-label">Image</label>
-              {subcategoryImages.map((image, index) => (
-                <div key={index} className=' bg-light rounded rounded-3 p-2 mb-3 border border-3 border-light-subtle'>
-                  <div className='mb-3'>
-                    <label htmlFor='inputSubcategoryImageUrl'>Image Url</label>
-                    <input
-                      type="text"
-                      id='inputSubcategoryImageUrl'
-                      className="form-control mb-1"
-                      name="imageUrl"
-                      value={image.imageUrl || ""}
-                      onChange={(e) => handleSubcategoryImageChange(index, e)}
-                    />
-                  </div>
-                  <div className='mb-3'>
-                    <label htmlFor='inputSubcategoryAltText'>Alt Text</label>
-                    <input
-                      type="text"
-                      id='inputSubcategoryAltText'
-                      className="form-control"
-                      required
-                      name="altText"
-                      value={image.altText || ""}
-                      onChange={(e) => handleSubcategoryImageChange(index, e)}
-                    />
-                  </div>
-                  {index !== 0 && (
-                    <button type="button" className="btn btn-danger" onClick={() => handleRemoveImage(index)}>Remove</button>
-                  )}
-                </div>
-              ))}
-              <button type="button" className="btn btn-primary mt-3" onClick={handleAddImage}>Add more</button>
-            </div>
             <div className='d-flex justify-content-center gap-4'>
+              <Link to={`/update-subcategory-images/${id}`} className="btn btn-info px-4">Update Images</Link>
               <button type="button" className="btn px-4" onClick={handleReset} style={{ backgroundColor: "orange" }}>Reset</button>
               <button type="submit" className="btn btn-success px-4">Submit</button>
             </div>
           </form>
         </div>
       }
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   )
 }

@@ -9,7 +9,11 @@ const Navbar = () => {
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <a className="navbar-brand " href="#">BillionCart</a>
+                <a className="navbar-brand " href="#">
+                    <div className=' overflow-hidden' style={{height: "60px", width: "200px"}}>
+                        <img src='/images/billioncart_logo.png' className=' object-fit-cover w-100 h-100'/>
+                    </div>
+                </a>
                 <div className=' d-flex justify-content-evenly align-content-center'>
                     <ul className=" d-flex justify-content-evenly list-unstyled gap-3 align-items-center">
                         <li className="nav-item">

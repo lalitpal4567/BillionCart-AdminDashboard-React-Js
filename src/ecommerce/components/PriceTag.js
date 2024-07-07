@@ -17,11 +17,11 @@ const calculateDiscount = (currentPrice, previousPrice) => {
     return ((previousPrice - currentPrice) / previousPrice) * 100;
 };
 
-const PriceTag = ({ currentPrice, previousPrice }) => {
+const PriceTag = ({style, className, currentPrice, previousPrice }) => {
     const discount = calculateDiscount(currentPrice, previousPrice).toFixed(2).replace(/\.?0+$/, '');
-
+    const tag = `d-flex justify-content-start align-items-center gap-3 flex-wrap ${className}`
     return (
-        <div className=' d-flex justify-content-start align-items-center gap-3 flex-wrap' style={{fontSize: "17px"}}>
+        <div className={tag} style={{fontSize: "17px", backgroundColor: style?.backgroundColor}}>
             <span className='currentPrice'>
                 <CurrencyFormatter price={currentPrice} />
             </span>

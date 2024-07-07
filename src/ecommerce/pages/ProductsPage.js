@@ -36,29 +36,27 @@ const ProductsPage = () => {
     return (
         <div>
             <Navbar />
-            <div className="container-fluid border border-2 border-black">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col border border-2 border-black">
-                            <SidebarFilter />
+            <div className="container-fluid border border-2 border-black p-0">
+                <div className="container-fluid row">
+                    <div className="col border border-2 border-black">
+                        <SidebarFilter />
+                    </div>
+                    <div className=" col-9 border border-2 border-black py-2">
+                        <div className=' d-flex justify-content-start flex-wrap gap-5 px-3 py-3' style={{ backgroundColor: "#f5f5f5" }}>
+                            <ProductCard />
+                            <ProductCard />
+                            <ProductCard />
+                            <ProductCard />
+                            <ProductCard />
+                            <ProductCard />
+                            <ProductCard />
                         </div>
-                        <div className=" col-9 border border-2 border-black p-4">
-                            <div className=' d-flex justify-content-start flex-wrap gap-5'>
-                                <ProductCard />
-                                <ProductCard />
-                                <ProductCard />
-                                <ProductCard />
-                                <ProductCard />
-                                <ProductCard />
-                                <ProductCard />
-                            </div>
-                            <div className=' pt-4'>
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    onPageChange={handlePageChange}
-                                />
-                            </div>
+                        <div className=' pt-4'>
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>

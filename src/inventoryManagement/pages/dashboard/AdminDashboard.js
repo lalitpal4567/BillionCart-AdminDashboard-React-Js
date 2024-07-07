@@ -30,6 +30,7 @@ import SpecificationInfo from '../specifications/SpecificationInfo';
 import AddSpecification from '../specifications/AddSpecification';
 import UpdateSpecification from '../specifications/UpdateSpecification';
 import ErrorPage from '../ErrorPage';
+import UpdateSubcategoryImages from '../subcategory/UpdateSubcategoryImages';
 
 
 const AdminDashboard = () => {
@@ -75,6 +76,7 @@ const AdminDashboard = () => {
                         <Route path="/add-subcategory" element={<AddSubcategory />} />
                         <Route path='/subcategory-info/:id' element={<SubcategoryInfo />} />
                         <Route path='/update-subcategory/:id' element={<UpdateSubcategory />} />
+                        <Route path='/update-subcategory-images/:id' element={<UpdateSubcategoryImages />} />
 
                         <Route path="/specification-info" element={<SpecificationInfo />} />
                         <Route path="/add-specification" element={<AddSpecification />} />

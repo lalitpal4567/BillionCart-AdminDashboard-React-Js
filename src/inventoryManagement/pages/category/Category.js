@@ -24,7 +24,8 @@ const Category = () => {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
 
-  localStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDEiLCJpYXQiOjE3MTk0NzQzMjUsImV4cCI6MTcyMDA3OTEyNX0.szliND3riTih-OvuWuiDYbg8L9v7uvK_iz-kwVKkkRHjrvoMTef7xOlMkaILAfWbICOlWlgnKpXr88FZMDXI2A");
+  // localStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDEiLCJpYXQiOjE3MjAyNDkxODAsImV4cCI6MTcyMDg1Mzk4MH0._sZuyubB5hk2MNJiR0GgGWw0nuATACyzQsC7MQAq1LX9XVS6IYIJFHkQUY6qD5MLhS059hkyo-8OPUEhILZKUg");
+  localStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDEiLCJpYXQiOjE3MjAyOTQ5MDAsImV4cCI6MTcyMDg5OTcwMH0.F6-yY5NPPTb68hKMqf0HGa-nBINtFxZorYcfthRZwNSmOyTC10u6dVQR9dnvLCZZRlZVJk-wFFA_JJGJmJ2m4A");
   const token = localStorage.getItem('token');
 
   const fetchCategories = async () => {
