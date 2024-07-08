@@ -30,7 +30,7 @@ const AddSubcategory = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/category/categories-list`, {
+      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/category/categories-list`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

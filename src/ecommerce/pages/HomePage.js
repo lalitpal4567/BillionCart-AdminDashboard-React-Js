@@ -5,16 +5,16 @@ import SubcategoryCard from '../components/SubcategoryCard'
 import CategoryCard from '../components/CategoryCard'
 import Footer from '../components/Footer'
 import CategoryNavbar from '../components/CategoryNavbar'
+import CategoryGroup from '../components/CategoryGroup'
 
 const HomePage = () => {
+  
   return (
     <div>
       <Navbar />
       <CategoryNavbar/>
       <Carousel />
-      <CategoryCard/>
-      <CategoryCard/>
-      <CategoryCard/>
+      <CategoryGroup/>
       <Footer/>
     </div>
   )

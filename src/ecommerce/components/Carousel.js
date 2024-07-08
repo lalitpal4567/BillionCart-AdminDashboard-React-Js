@@ -4,7 +4,7 @@ const Carousel = () => {
     return (
         <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
-                <div class="carousel-item active">
+                <div className="carousel-item active">
                     <img src="/images/laptop.jpg" className="d-block w-100" alt="..."/>
                 </div>
                 <div className="carousel-item">
@@ -18,6 +18,18 @@ const Carousel = () => {
                 </div>
                 <div className="carousel-item">
                     <img src="/images/frying_pan.jpg" className="d-block w-100" alt="..."/>
+                </div>
+                <div className="carousel-item">
+                    <img src="/images/sofa_set.jpg" className="d-block w-100" alt="..."/>
+                </div>
+                <div className="carousel-item">
+                    <img src="/images/wooden_wardrobe.jpg" className="d-block w-100" alt="..."/>
+                </div>
+                <div className="carousel-item">
+                    <img src="/images/earbud.jpg" className="d-block w-100" alt="..."/>
+                </div>
+                <div className="carousel-item">
+                    <img src="/images/gas_stove.jpg" className="d-block w-100" alt="..."/>
                 </div>
             </div>
             <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">

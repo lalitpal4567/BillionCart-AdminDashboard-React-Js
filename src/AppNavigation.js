@@ -10,8 +10,8 @@ import CartPage from './ecommerce/pages/CartPage'
 const AppNavigation = () => {
   return (
     <Routes>
-        <Route path='/*' element={<AdminDashboard/>}></Route>
-        {/* <Route path='/' element={<HomePage/>}></Route> */}
+        {/* <Route path='/*' element={<AdminDashboard/>}></Route> */}
+        <Route path='/' element={<HomePage/>}></Route>
         {/* <Route path='/' element={<CartPage/>}></Route> */}
         {/* <Route path='/' element={<HomePage/>}></Route> */}
         {/* <Route path='/' element={<SignupPage/>}></Route> */}

@@ -10,7 +10,7 @@ const Navbar = () => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <a className="navbar-brand " href="#">
-                    <div className=' overflow-hidden' style={{height: "60px", width: "200px"}}>
+                    <div className=' overflow-hidden' style={{height: "50px", width: "200px"}}>
                         <img src='/images/billioncart_logo.png' className=' object-fit-cover w-100 h-100'/>
                     </div>
                 </a>

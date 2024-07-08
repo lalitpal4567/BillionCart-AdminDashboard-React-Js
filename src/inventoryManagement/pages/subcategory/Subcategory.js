@@ -58,11 +58,7 @@ const Subcategory = () => {
     const fetchCategories = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/category/categories-list", {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
                 params: {
                     page: currentPage,
                     size: pageSize
@@ -146,7 +142,7 @@ const Subcategory = () => {
         setDeleteSubcategoryId('');
     }
 
-    const fetchSubcategoriesBySearchQuery = async(e) => {
+    const fetchSubcategoriesBySearchQuery = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
@@ -216,10 +212,10 @@ const Subcategory = () => {
                                 onKeyDown={handleKeyDown}
                                 onChange={handleSearchQueryChange}
                             />
-                            <button 
-                                type='submit' 
+                            <button
+                                type='submit'
                                 className=" rounded rounded-2"
-                                >Search
+                            >Search
                             </button>
                         </div>
                     </form>

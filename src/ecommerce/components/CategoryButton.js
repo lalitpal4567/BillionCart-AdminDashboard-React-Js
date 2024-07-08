@@ -1,22 +1,30 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const CategoryButton = () => {
+const CategoryButton = ({category}) => {
     return (
-        <div className=' p-2'>
-            <div className=' overflow-hidden' style={{ height: "60px", weight: "60px" }}>
+        <div className=' p-2 text-center'>
+            <div className=' overflow-hidden' style={{ height: "70px", weight: "70px" }}>
                 <img
-                    src="/images/smart_watch.webp"
+                    src={category.imageUrl}
                     className=" object-fit-contain w-100 h-100"
+                    alt={category.altText}
                 />
             </div>
-            <div class="">
-                <a class=" dropdown-toggle text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdow
+            <div className="">
+                <a className=" dropdown-toggle text-decoration-none text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {category.name}
                 </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <ul className="dropdown-menu">
+                    {
+                        category.subcategories.map((subcategory, index) =>{
+                            return (
+                                <li className=''>
+                                    <Link to="###" className="dropdown-item" href="#">{subcategory.name}</Link>
+                                </li>
+                            )
+                        })
+                    }
                 </ul>
             </div>
         </div>

@@ -175,10 +175,10 @@ const UpdateSubcategoryImages = () => {
                                                                 type="text"
                                                                 className="form-control"
                                                                 id="inputAltText"
+                                                                required
                                                                 name="altText"
                                                                 value={altTexts[index].altText || ""}
                                                                 onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
-
                                                             />
                                                         </div>
                                                         <div className='' style={{ width: "200px", height: "120px" }}>
