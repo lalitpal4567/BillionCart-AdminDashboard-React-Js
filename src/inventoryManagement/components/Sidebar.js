@@ -11,6 +11,7 @@ const Sidebar = () => {
                 <Link to="/color" className="list-group-item list-group-item-action">Color</Link>
                 <Link to="/product" className="list-group-item list-group-item-action">Product</Link>
                 <Link to="/category" className="list-group-item list-group-item-action">Category</Link>
+                <Link to="/carousel" className="list-group-item list-group-item-action">Carousel</Link>
             </div>
             <div className="accordion" id="accordionExample">
                 <div className="accordion-item">

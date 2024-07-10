@@ -2,20 +2,24 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { ToastContainer, toast, useToast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import BackButton from '../../components/BackButton';
 import Spinner from '../../components/Spinner';
+import AlertMessageModal from '../../components/AlertMessageModal';
 
 const AddSubcategory = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState(null);
+  const [isSizeExceeded, setIsSizeExceeded] = useState(false);
+  const [isFileSizeValid, setIsFileSizeValid] = useState(true);
+  const [isFileSizeExceeded, setIsFileSizeExceeded] = useState([false]);
+  const [showModal, setShowModal] = useState(false);
+
   const [imageFiles, setImageFiles] = useState([{ imageFile: null }]);
-  const [altTexts, setAltTexts] = useState([{
-    altText: ""
-  }])
+  const [altTexts, setAltTexts] = useState([{ altText: "" }])
 
   const [subcategory, setSubcategory] = useState({
     name: '',
@@ -56,6 +60,12 @@ const AddSubcategory = () => {
     e.preventDefault();
     setLoading(true);
 
+    if (isFileSizeExceeded.some(exceeded => exceeded)) {
+      setLoading(false);
+      setShowModal(true);
+      return;
+    }
+
     const formData = new FormData();
     const newSubcategory = { ...subcategory, altTexts };
 
@@ -78,8 +88,8 @@ const AddSubcategory = () => {
       toast.success("Subcategory added successfully!");
       setTimeout(() => navigate("/subcategory"), 2000);
     } catch (error) {
-      console.log("Error while adding subcategory: ", error);
-      toast.error("Error while adding subcategory");
+      console.log("Error occurred while adding subcategory: ", error);
+      toast.error(error);
       setLoading(false);
     }
   }
@@ -105,24 +115,40 @@ const AddSubcategory = () => {
   const handleRemoveImageField = (index) => {
     const updatedImageFiles = imageFiles.filter((_, i) => i !== index);
     const updatedAltTexts = altTexts.filter((_, i) => i !== index);
+    const updatedSizeExceeded = isFileSizeExceeded.filter((_, i) => i !== index);
+
     setImageFiles(updatedImageFiles);
     setAltTexts(updatedAltTexts);
+    setIsFileSizeExceeded(updatedSizeExceeded);
+
   };
 
   const handleSubcategoryImageAltTextInputChange = (index, e) => {
-    const {type, value, files } = e.target;
+    const { type, value, files } = e.target;
     const newImageFiles = [...imageFiles];
     const newAltTexts = [...altTexts];
-    
-    if(type === "file"){
+
+    if (type === "file") {
+      const file = files[0];
+      const maxSizeInBytes = 1 * 1024 * 1024;
       newImageFiles[index] = { ...newImageFiles[index], imageFile: files[0] };
+
+      const isExceeded = file.size > maxSizeInBytes;
+      const updatedSizeExceeded = [...isFileSizeExceeded];
+      updatedSizeExceeded[index] = isExceeded;
+
+      setImageFiles(newImageFiles);
+      setIsFileSizeExceeded(updatedSizeExceeded);
     }
-    if(type === "text"){
-      newAltTexts[index] = {...newAltTexts[index], altText: value};
+    else if (type === "text") {
+      newAltTexts[index] = { ...newAltTexts[index], altText: value };
     }
-    setImageFiles(newImageFiles);
     setAltTexts(newAltTexts);
   };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  }
 
   const handleReset = () => {
     setSubcategory({
@@ -142,6 +168,10 @@ const AddSubcategory = () => {
       </div>
       {loading ? <Spinner /> :
         <div className=' overflow-y-scroll px-2' style={{ height: "450px" }}>
+          <AlertMessageModal
+            onClose={handleCloseModal}
+            show={showModal}
+          />
           <form className=' w-50' onSubmit={addSubcategory}>
             <div>
               <label htmlFor='inputCategoryName'>Category</label>
@@ -166,7 +196,9 @@ const AddSubcategory = () => {
             {categoryId &&
               <div>
                 <div className='mb-3'>
-                  <label htmlFor="inputSubcategory" className="form-label">Subcategory</label>
+                  <label htmlFor="inputSubcategory" className="form-label">
+                    Subcategory <span style={{ color: 'red' }}>*</span>
+                  </label>
                   <input
                     type="text"
                     id="inputSubcategory"
@@ -179,7 +211,8 @@ const AddSubcategory = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="inputDescription" className="form-label">Description</label>
+                  <label htmlFor="inputDescription" className="form-label">
+                    Description <span style={{ color: 'red' }}>*</span></label>
                   <textarea
                     id="inputDescription"
                     name="description"
@@ -194,7 +227,13 @@ const AddSubcategory = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Image</label>
+                  <label className="form-label">
+                    Image <span style={{ color: 'red' }}>*</span></label>
+                  <p className='' style={{ fontSize: "12px", color: "green" }}>At least one image should be uploaded
+                    <span className=' text-danger ms-2'>size &lt; 10 Mb</span>
+                    <br></br>
+                    File format: <span>jpg/jpeg/png</span>
+                  </p>
                   {
                     imageFiles.map((image, index) => (
                       <div key={index} className=' bg-light rounded rounded-3 p-2 mb-2 border border-3 border-light-subtle'>
@@ -205,6 +244,7 @@ const AddSubcategory = () => {
                             className="form-control"
                             id="inputImageFile"
                             name="imageFile"
+                            required
                             ref={fileInputRef}
                             accept="image/jpg, image/jpeg, image/png"
                             onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
@@ -218,10 +258,13 @@ const AddSubcategory = () => {
                               className="form-control"
                               id="inputAltText"
                               name="altText"
+                              required
                               value={altTexts[index].altText || ""}
                               onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
-
                             />
+                            {index === 0 && isFileSizeExceeded[index] &&
+                              <p className=' text-danger ms-3'>Size exceeded!!!</p>
+                            }
                           </div>
                           <div className='' style={{ width: "200px", height: "120px" }}>
                             <img
@@ -232,7 +275,10 @@ const AddSubcategory = () => {
                           </div>
                         </div>
                         {index !== 0 && (
-                          <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveImageField(index)}>Remove</button>
+                          <div className=' d-flex align-items-center'>
+                            <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveImageField(index)}>Remove</button>
+                            {isFileSizeExceeded[index] && <span className=' text-danger ms-3'>Size exceeded!!!</span>}
+                          </div>
                         )}
                       </div>
                     ))}

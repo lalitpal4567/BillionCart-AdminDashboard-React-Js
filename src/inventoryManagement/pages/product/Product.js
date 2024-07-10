@@ -15,17 +15,13 @@ const Product = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 2;
+  const pageSize = 5;
 
   const token = localStorage.getItem('token');
 
   const fetchCategories = async () => {
     setLoading(true);
-    const res = await axios.get("http://localhost:9090/api/v1/admin/category/categories-list", {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+    const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
       params: {
         page: currentPage,
         size: pageSize
@@ -39,19 +35,15 @@ const Product = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:9090/api/v1/admin/product/product-list", {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/product/product-list", {
         params: {
-          page: 0,
-          size: 10
+          page: currentPage,
+          size: pageSize
         }
       });
       setLoading(false);
       setProducts(res.data.content)
-      // setTotalPages(res.data.totalPages);
+      setTotalPages(res.data.totalPages);
     } catch (error) {
       console.log("Error while fetching products: ", error);
       setLoading(false);
@@ -63,7 +55,7 @@ const Product = () => {
   }, []);
 
   const handlePageChange = (page) => {
-    // setCurrentPage(page);
+    setCurrentPage(page);
   }
   return (
     <div className=' py-2'>
@@ -111,10 +103,17 @@ const Product = () => {
             {/* pagination */}
             <nav aria-label="Page navigation">
               <ul className="pagination pagination-sm">
-                <li className={`page-item ${currentPage === 0 ? 'active' : ''}`} aria-current="page">
-                  <span className="page-link" onClick={() => handlePageChange(currentPage - 1)}>1</span>
+                <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+                  <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>&laquo;</button>
                 </li>
-                <li className={`page-item ${currentPage !== 0 ? '' : 'active'}`}><a className="page-link" href="#" onClick={() => handlePageChange(currentPage + 1)}>2</a></li>
+                {[...Array(totalPages)].map((_, index) => (
+                  <li key={index} className={`page-item ${index === currentPage ? 'active' : ''}`}>
+                    <button className="page-link" onClick={() => handlePageChange(index)}>{index + 1}</button>
+                  </li>
+                ))}
+                <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
+                  <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>&raquo;</button>
+                </li>
               </ul>
             </nav>
           </div>

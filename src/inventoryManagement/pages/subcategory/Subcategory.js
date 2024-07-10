@@ -31,11 +31,7 @@ const Subcategory = () => {
     const fetchSubcategories = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/subcategory/subcategories-list", {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/subcategory/subcategories-list", {
                 params: {
                     page: currentPage,
                     size: pageSize

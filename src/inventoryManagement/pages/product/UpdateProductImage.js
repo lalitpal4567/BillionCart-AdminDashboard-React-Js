@@ -1,17 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
-import BackButton from '../../components/BackButton';
-import Spinner from '../../components/Spinner';
-import axios from 'axios';
+import React from 'react'
+
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react'
+import axios from 'axios';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import BackButton from '../../components/BackButton';
+import Spinner from '../../components/Spinner';
 import AlertMessageModal from '../../components/AlertMessageModal';
 import DeleteModal from '../../components/DeleteModal';
 
-const UpdateSubcategoryImages = () => {
+const UpdateProductImage = () => {
     const [loading, setLoading] = useState(false);
-    const [subcategoryImages, setSubcategoryImages] = useState([]);
-    const [deleteSubcategoryImageId, setDeleteSubcategoryImageId] = useState(null);
+    const [productImages, setProductImages] = useState([]);
+    const [deleteProductImageId, setDeleteProductImageId] = useState(null);
 
     const [isFileSizeExceeded, setIsFileSizeExceeded] = useState([false]);
     const [isAllFilesSelected, setIsAllFilesSelected] = useState(false);
@@ -20,35 +24,34 @@ const UpdateSubcategoryImages = () => {
     const [showAlertModal, setShowAlertModal] = useState(false);
 
     const [imageFiles, setImageFiles] = useState([{ imageFile: null }])
-    const [altTexts, setAltTexts] = useState([{ altText: "" }])
-
+    const [altTexts, setAltTexts] = useState([{altText: ""}])
 
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const { id } = useParams();
 
-    const fetchSubcategoryImages = async () => {
+    const fetchProductImages = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/subcategory/get-subcategory-images/${id}`);
+            const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/product/get-product-images/${id}`);
             setLoading(false);
-            setSubcategoryImages(res.data.SubcategoryImages);
+            setProductImages(res.data.ProductImages)
         } catch (error) {
             setLoading(false);
-            console.log("Error occurred while fetching subcategory image: ", error);
+            console.log("Error occurred while fetching product image ", error);
         }
     }
 
     useEffect(() => {
-        fetchSubcategoryImages();
+        fetchProductImages();
     }, []);
 
     useEffect(() => {
         checkAllFilesSelected();
     }, [imageFiles]);
 
-    const addSubcategoryimages = async (e) => {
+    const addProductImages = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -67,7 +70,7 @@ const UpdateSubcategoryImages = () => {
         });
 
         try {
-            const res = await axios.post(`http://localhost:9090/api/v1/admin/subcategory/add-subcategory-images/${id}`, formData, {
+            const res = await axios.post(`http://localhost:9090/api/v1/admin/product/add-product-images/${id}`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -75,34 +78,34 @@ const UpdateSubcategoryImages = () => {
             })
 
             setLoading(false);
-            toast.success("Subcategory images added successfully!");
-            setTimeout(() => navigate(`/subcategory-info/${id}`), 2000);
+            toast.success("Product images added successfully!");
+            setTimeout(() => navigate(`/product-info/${id}`), 2000);
         } catch (error) {
             setLoading(false);
-            console.log("Error occurred while adding subcategory images ", error);
-            toast.error("Error occurred while adding subcategory images");
+            console.log("Error occurred while adding product images: ", error);
+            toast.error("Error occurred while adding product images");
         }
     }
 
-    const removeSubcategoryImage = async () => {
+    const removeProductImage = async () => {
         setLoading(true);
         try {
-            const res = await axios.delete(`http://localhost:9090/api/v1/admin/subcategory/remove-subcategory-image/${deleteSubcategoryImageId}`, {
+            const res = await axios.delete(`http://localhost:9090/api/v1/admin/product/remove-product-image/${deleteProductImageId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
             setLoading(false);
-            toast.success("Subcategory image removed successfully");
+            toast.success("Product image removed successfully");
             handleCloseModal();
         } catch (error) {
             setLoading(false);
-            console.log("Error occurred while removing subcategory image", error);
-            toast.error("Error occurred while removing subcategory image");
+            console.log("Error occurred while removing product image", error);
+            toast.error("Error occurred while removing product image");
         }
     }
 
-    const handleSubcategoryImageAltTextInputChange = (index, e) => {
+    const handleProductImageAltTextInputChange = (index, e) => {
         const { type, value, files } = e.target;
         const newImageFiles = [...imageFiles];
         const newAltTexts = [...altTexts];
@@ -126,20 +129,20 @@ const UpdateSubcategoryImages = () => {
         }
         setAltTexts(newAltTexts);
     };
-
-    const handleAddImageField = () => {
-        setImageFiles([...imageFiles, { imageFile: null }]);
-        setAltTexts([...altTexts, { altText: "" }])
-    };
-
+    
     const handleDeleteProductImage = (id) => {
-        setDeleteSubcategoryImageId(id);
+        setDeleteProductImageId(id);
         setShowDeleteModal(true);
     }
 
     const checkAllFilesSelected = () => {
         const allSelected = imageFiles.every(file => file.imageFile !== null);
         setIsAllFilesSelected(allSelected);
+    };
+
+    const handleAddImageField = () => {
+        setImageFiles([...imageFiles, { imageFile: null }]);
+        setAltTexts([...altTexts, { altText: "" }])
     };
 
     const handleRemoveImageField = (index) => {
@@ -156,7 +159,7 @@ const UpdateSubcategoryImages = () => {
     const handleCloseModal = () => {
         setShowDeleteModal(false);
         setShowAlertModal(false);
-        setDeleteSubcategoryImageId(null);
+        setDeleteProductImageId(null);
     }
 
     const handleResetImages = () => {
@@ -169,8 +172,8 @@ const UpdateSubcategoryImages = () => {
     return (
         <div className='p-2 border border-2 border-danger'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/subcategory" />
-                <h1 className='mx-auto'>Add Subcategory Images</h1>
+                <BackButton to="/product" />
+                <h1 className='mx-auto'>Add Product Images</h1>
             </div>
             {loading ? <Spinner /> :
                 <div className='overflow-y-scroll' style={{ height: "450px" }}>
@@ -181,12 +184,12 @@ const UpdateSubcategoryImages = () => {
                     <DeleteModal
                         show={showDeleteModal}
                         onClose={handleCloseModal}
-                        onConfirm={removeSubcategoryImage}
+                        onConfirm={removeProductImage}
                     />
                     <div className=' d-flex justify-content-evenly ' >
                         <div className=' border border-3 border-light-subtle p-2' style={{ width: "50%" }}>
                             {
-                                subcategoryImages.map((image, index) => {
+                                productImages.map((image, index) => {
                                     return (
                                         <div key={index} className='d-flex align-items-center justify-content-between border border-2 border-light-subtle '>
                                             <div className='' style={{ height: "130px", width: "200px" }}>
@@ -200,7 +203,7 @@ const UpdateSubcategoryImages = () => {
                         </div>
                         <div>
                             <div className='px-2'>
-                                <form className=' w-100' onSubmit={addSubcategoryimages} >
+                                <form className=' w-100' onSubmit={addProductImages} >
                                     <div className="mb-3">
                                         <label className="form-label">Image</label>
                                         <p className='' style={{ fontSize: "12px", color: "red" }}>
@@ -219,7 +222,7 @@ const UpdateSubcategoryImages = () => {
                                                             name="imageFile"
                                                             ref={fileInputRef}
                                                             accept="image/jpg, image/jpeg, image/png"
-                                                            onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
+                                                            onChange={(e) => handleProductImageAltTextInputChange(index, e)}
                                                         />
                                                     </div>
                                                     <div className=' d-flex justify-content-between flex-wrap pt-2'>
@@ -232,7 +235,7 @@ const UpdateSubcategoryImages = () => {
                                                                 required
                                                                 name="altText"
                                                                 value={altTexts[index].altText || ""}
-                                                                onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
+                                                                onChange={(e) => handleProductImageAltTextInputChange(index, e)}
                                                             />
                                                             {index === 0 && isFileSizeExceeded[index] &&
                                                                 <p className=' text-danger ms-3'>Size exceeded!!!</p>
@@ -271,4 +274,4 @@ const UpdateSubcategoryImages = () => {
     )
 }
 
-export default UpdateSubcategoryImages
+export default UpdateProductImage

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import BackButton from '../../components/BackButton';
 import Spinner from '../../components/Spinner';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,6 @@ const UpdateProduct = () => {
   const [loading, setLoading] = useState(false);
   const [initialProduct, setInitialproduct] = useState(null);
   const [initialSpecificationValues, setInitialSpecificationValues] = useState(null);
-  const [initialProductImages, setInitialProductImages] = useState(null);
   const [fetchedProduct, setFetchedProduct] = useState(null);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
@@ -27,11 +26,6 @@ const UpdateProduct = () => {
     quantity: "",
     model: ""
   })
-
-  const [productImages, setProductImages] = useState([{
-    imageUrl: "",
-    altText: ""
-  }])
 
   const [specificationValues, setSpecificationValues] = useState([{
     value: "",
@@ -51,7 +45,7 @@ const UpdateProduct = () => {
   const fetchProductById = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/product/fetch-product/${id}`, {
+      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/product/fetch-product/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -60,7 +54,6 @@ const UpdateProduct = () => {
 
       setFetchedProduct(res.data.Product);
       const tempProduct = res.data.Product;
-      console.log(tempProduct);
       product.name = tempProduct.name;
       product.brandId = tempProduct.brand.brandId;
       product.colorId = tempProduct.color.colorId;
@@ -71,12 +64,6 @@ const UpdateProduct = () => {
       product.currentPrice = tempProduct.currentPrice;
       product.previousPrice = tempProduct.previousPrice;
 
-      console.log("product: ", product);
-      setProductImages(tempProduct.productImages.map(image => ({
-        imageUrl: image.imageUrl,
-        altText: image.altText
-      })))
-
       setSpecificationValues(tempProduct.specifications.map(spec => ({
         value: spec.value,
         nameId: spec.nameId
@@ -84,7 +71,6 @@ const UpdateProduct = () => {
 
       await fetchSpecificationNameBySubcategoryId(tempProduct.subcategory.subcategoryId);
       setInitialproduct(product);
-      setInitialProductImages(productImages);
       setInitialSpecificationValues(specificationValues);
       setLoading(false);
 
@@ -164,15 +150,6 @@ const UpdateProduct = () => {
     }));
   };
 
-  const handleProductImageChange = (index, e) => {
-    const { name, value } = e.target;
-    setProductImages(prevState => {
-      const newProductImages = [...prevState];
-      newProductImages[index] = { ...newProductImages[index], [name]: value };
-      return newProductImages;
-    });
-  };
-
   const handleSpecificationValuesChange = (index, e, nameId) => {
     const { name, value } = e.target;
     setSpecificationValues(prevState => {
@@ -186,7 +163,7 @@ const UpdateProduct = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const combinedProduct = { ...product, specificationValues, productImages };
+      const combinedProduct = { ...product, specificationValues };
       const res = await axios.put(`http://localhost:9090/api/v1/admin/product/update-product/${fetchedProduct.productId}`, combinedProduct, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -204,9 +181,8 @@ const UpdateProduct = () => {
   }
 
   const handleReset = () => {
-    if (initialProduct || initialProductImages || initialSpecificationValues) {
+    if (initialProduct || initialSpecificationValues) {
       setProduct(initialProduct);
-      setProductImages(initialProductImages);
       setSpecificationValues(initialSpecificationValues);
     }
   }
@@ -412,36 +388,8 @@ const UpdateProduct = () => {
                 </tbody>
               </table>
             </div>
-            <div className="mb-3">
-              <label className="form-label">Images</label>
-              {productImages?.map((image, index) => (
-                <div key={index} className=' bg-light rounded rounded-3 p-2 mb-2 border border-3 border-light-subtle'>
-                  <div className='mb-3'>
-                    <label htmlFor="inputImageUrl" className="form-label">Image Url</label>
-                    <input
-                      type="text"
-                      className="form-control mb-1"
-                      id="inputImageUrl"
-                      name="imageUrl"
-                      value={image.imageUrl}
-                      onChange={(e) => handleProductImageChange(index, e)}
-                    />
-                  </div>
-                  <div className='mb-3'>
-                    <label htmlFor="inputImageAltText" className="form-label">Alternate Text</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputImageAltText"
-                      name="altText"
-                      value={image.altText}
-                      onChange={(e) => handleProductImageChange(index, e)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
             <div className='d-flex justify-content-center gap-4'>
+              <Link to={`/update-product-image/${id}`} className="btn btn-info px-4">Update Images</Link>
               <button type="button" className="btn px-4" onClick={handleReset} style={{ backgroundColor: "orange" }}>Reset</button>
               <button type="submit" className="btn btn-success px-4">Submit</button>
             </div>

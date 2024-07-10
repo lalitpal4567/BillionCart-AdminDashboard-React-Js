@@ -5,31 +5,33 @@ import { Route, Routes } from 'react-router-dom';
 
 import "./AdminDashboard.css"
 import User from '../user/User';
-import UserInfo from '../user/UserInfo';
+import Color from '../color/Color';
 import Brand from '../brand/Brand';
+import ErrorPage from '../ErrorPage';
+import UserInfo from '../user/UserInfo';
+import AddColor from '../color/AddColor';
+import Product from '../product/Product';
 import AddBrand from '../brand/AddBrand';
 import BrandInfo from '../brand/BrandInfo';
-import UpdateBrand from '../brand/UpdateBrand';
-import Color from '../color/Color';
-import AddColor from '../color/AddColor';
 import ColorInfo from '../color/ColorInfo';
-import Product from '../product/Product';
+import Category from '../category/Category';
 import UpdateColor from '../color/UpdateColor';
+import UpdateBrand from '../brand/UpdateBrand';
 import AddProduct from '../product/AddProduct';
 import ProductInfo from '../product/ProductInfo';
-import UpdateProduct from '../product/UpdateProduct';
-import Category from '../category/Category';
 import AddCategory from '../category/AddCategory';
 import CategoryInfo from '../category/CategoryInfo';
-import UpdateCategory from '../category/UpdateCategory';
 import Subcategory from '../subcategory/Subcategory';
+import UpdateProduct from '../product/UpdateProduct';
+import CarouselImage from '../carousel/CarouselImage';
+import UpdateCategory from '../category/UpdateCategory';
 import AddSubcategory from '../subcategory/AddSubcategory';
 import SubcategoryInfo from '../subcategory/SubcategoryInfo';
+import UpdateProductImage from '../product/UpdateProductImage';
 import UpdateSubcategory from '../subcategory/UpdateSubcategory';
-import SpecificationInfo from '../specifications/SpecificationInfo';
 import AddSpecification from '../specifications/AddSpecification';
+import SpecificationInfo from '../specifications/SpecificationInfo';
 import UpdateSpecification from '../specifications/UpdateSpecification';
-import ErrorPage from '../ErrorPage';
 import UpdateSubcategoryImages from '../subcategory/UpdateSubcategoryImages';
 
 
@@ -66,6 +68,7 @@ const AdminDashboard = () => {
                         <Route path='/add-product' element={<AddProduct />} />
                         <Route path='/product-info/:id' element={<ProductInfo />} />
                         <Route path='/update-product/:id' element={<UpdateProduct />} />
+                        <Route path='/update-product-image/:id' element={<UpdateProductImage />} />
 
                         <Route path='/category' element={<Category />} />
                         <Route path="/add-category" element={<AddCategory />} />
@@ -81,6 +84,8 @@ const AdminDashboard = () => {
                         <Route path="/specification-info" element={<SpecificationInfo />} />
                         <Route path="/add-specification" element={<AddSpecification />} />
                         <Route path='/update-specification/:id' element={<UpdateSpecification />} />
+
+                        <Route path='/carousel' element={<CarouselImage/>} />
 
                         <Route path='*' element={<ErrorPage />} />
                     </Routes>

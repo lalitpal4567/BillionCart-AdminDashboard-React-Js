@@ -24,7 +24,7 @@ const CategoryGroup = () => {
     }, []);
 
     return (
-        <div className=''>
+        <div className=''> 
             {
                 categories.map((category, index) => {
                     return (

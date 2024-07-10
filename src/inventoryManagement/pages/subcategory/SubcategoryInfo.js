@@ -14,12 +14,7 @@ const SubcategoryInfo = () => {
   const fetchSubcategoryById = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/subcategory/get-subcategory/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
-      });
+      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/subcategory/get-subcategory/${id}`);
       setLoading(false);
       setSubcategory(res.data.Subcategory);
       console.log(res.data.Subcategory);

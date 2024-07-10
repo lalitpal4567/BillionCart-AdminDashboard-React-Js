@@ -17,12 +17,7 @@ const ProductInfo = () => {
 
   const fetchProductById = async () => {
     setLoading(true);
-    const res = await axios.get(`http://localhost:9090/api/v1/admin/product/fetch-product/${id}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      }
-    });
+    const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/product/fetch-product/${id}`);
     setLoading(false);
     setProduct(res.data.Product);
   }
@@ -122,17 +117,17 @@ const ProductInfo = () => {
                   <th scope="row">Image Url</th>
                   <td className='d-flex justify-content-start gap-2'>
                     {
-                      product.productImages?.map((imageUrl, index) => {
+                      product.productImages?.map((image, index) => {
                         return (
                           <div key={index}>
                             <div className=' overflow-hidden ' style={{ width: "100px", height: "50px" }}>
                               <img
-                                src="/images/fashion3.jpg"
-                                alt={imageUrl.altText}
+                                src={image.imageUrl}
+                                alt={image.altText}
                                 className=' w-100 h-100 object-fit-fill' />
                             </div>
                             <div>
-                              <button type="button" className='btn btn-primary' onClick={() => handleImageId(imageUrl.imageUrlId)} >Remove</button>
+                              <button type="button" className='btn btn-primary' onClick={() => handleImageId(image.imageUrlId)} >Remove</button>
                             </div>
                           </div>
                         )
