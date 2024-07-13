@@ -1,10 +1,12 @@
 import React from 'react'
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUserLarge } from "react-icons/fa6";
+import "./Navbar.css"
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary navbar-position ">
             <div className="container-fluid">
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -20,7 +22,7 @@ const Navbar = () => {
                             <a className="nav-link active" aria-current="page" href="#"><FaUserLarge className='' style={{ fontSize: "20px" }} /></a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#"><FaCartShopping className='' style={{ fontSize: "20px" }} /></a>
+                            <Link to="/shopping-cart" className="nav-link active" aria-current="page"><FaCartShopping className='' style={{ fontSize: "20px" }} /></Link>
                         </li>
                     </ul>
                     <div className="w-100" id="navbarSupportedContent">

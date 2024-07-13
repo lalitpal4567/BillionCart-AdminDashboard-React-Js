@@ -31,7 +31,7 @@ const UpdateSubcategoryImages = () => {
     const fetchSubcategoryImages = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/subcategory/get-subcategory-images/${id}`);
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/get-subcategory-images/${id}`);
             setLoading(false);
             setSubcategoryImages(res.data.SubcategoryImages);
         } catch (error) {

@@ -34,7 +34,7 @@ const UpdateProductImage = () => {
     const fetchProductImages = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/product/get-product-images/${id}`);
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/product/get-product-images/${id}`);
             setLoading(false);
             setProductImages(res.data.ProductImages)
         } catch (error) {

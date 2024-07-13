@@ -1,0 +1,9 @@
+.navbar-position{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000; /* Ensure it stays on top of other content */
+    background-color: white; /* Optional: To ensure the background is not transparent */
+    height: 60px; /* Set the height of the navbar */
+}
+

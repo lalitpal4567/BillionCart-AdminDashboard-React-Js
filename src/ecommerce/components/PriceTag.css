@@ -4,7 +4,7 @@
 }
 
 .label {
-    font-size: 15px;
+    font-size: 16px;
     text-decoration: line-through;
 
 }
@@ -20,7 +20,7 @@
 }
 
 .discount{
-    color: skyblue;
-    font-size: 15px;
+    color: #03AED2;
+    font-size: 16px;
     font-weight: bold;
 }

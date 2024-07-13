@@ -21,11 +21,7 @@ const SpecificationInfo = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:9090/api/v1/admin/category/categories-list", {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
         params: {
           page: 0,
           size: 10
@@ -46,11 +42,7 @@ const SpecificationInfo = () => {
     if (!categoryId) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/subcategory/subcategories-categories/${categoryId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/subcategories-category/${categoryId}`, {
         params: {
           page: 0,
           size: 10
@@ -68,11 +60,7 @@ const SpecificationInfo = () => {
     if (!subcategoryId) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/spec-name/get-names/${subcategoryId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/spec-name/get-names/${subcategoryId}`, {
         params: {
           page: 0,
           size: 10

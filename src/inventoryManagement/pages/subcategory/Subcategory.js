@@ -31,7 +31,7 @@ const Subcategory = () => {
     const fetchSubcategories = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/subcategory/subcategories-list", {
+            const res = await axios.get("http://localhost:9090/api/v1/noauth/subcategory/subcategories-list", {
                 params: {
                     page: currentPage,
                     size: pageSize
@@ -54,7 +54,7 @@ const Subcategory = () => {
     const fetchCategories = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
+            const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
                 params: {
                     page: currentPage,
                     size: pageSize
@@ -73,11 +73,7 @@ const Subcategory = () => {
         if (!categoryId) return;
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/subcategory/subcategories-categories/${categoryId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/subcategories-categories/${categoryId}`, {
                 params: {
                     page: 0,
                     size: pageSize

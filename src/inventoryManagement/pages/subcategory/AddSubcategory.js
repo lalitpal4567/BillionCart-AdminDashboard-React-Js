@@ -34,11 +34,7 @@ const AddSubcategory = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/category/categories-list`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/category/categories-list`, {
         params: {
           page: 0,
           size: pageSize
@@ -47,7 +43,7 @@ const AddSubcategory = () => {
       setLoading(false);
       setCategories(res.data.content);
     } catch (error) {
-      console.log("Error while fetching categories: ", error);
+      console.log("Error occurred while fetching categories: ", error);
       setLoading(false);
     }
   }

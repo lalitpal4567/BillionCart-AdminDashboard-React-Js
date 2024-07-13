@@ -19,7 +19,7 @@ const UpdateSubcategory = () => {
   const fetchSubcategoryById = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/subcategory/get-subcategory/${id}`);
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/get-subcategory/${id}`);
 
       setLoading(false);
       setFetchedSubcategory(res.data.Subcategory);

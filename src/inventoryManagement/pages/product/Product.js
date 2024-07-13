@@ -1,18 +1,26 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { IoInformationCircleSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { RiEdit2Fill } from "react-icons/ri";
 import { AiFillDelete } from "react-icons/ai";
-import { Link } from 'react-router-dom';
+import { IoInformationCircleSharp } from "react-icons/io5";
+
 import AddButton from '../../components/AddButton';
 import Spinner from '../../components/Spinner';
-
+import DeleteModal from '../../components/DeleteModal';
 
 
 const Product = () => {
+  const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [deleteProductId, setDeleteProductId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
@@ -21,7 +29,7 @@ const Product = () => {
 
   const fetchCategories = async () => {
     setLoading(true);
-    const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
+    const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
       params: {
         page: currentPage,
         size: pageSize
@@ -35,7 +43,7 @@ const Product = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/product/product-list", {
+      const res = await axios.get("http://localhost:9090/api/v1/noauth/product/product-list", {
         params: {
           page: currentPage,
           size: pageSize
@@ -54,6 +62,33 @@ const Product = () => {
     fetchProducts();
   }, []);
 
+  const removeProduct = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.delete(`http://localhost:9090/api/v1/admin/product/remove-product/${deleteProductId}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      setLoading(false);
+      handleCloseModal();
+      toast.success("Product removed successfully");
+      fetchProducts();
+    } catch (error) {
+      setLoading(false);
+      console.log("Error occurred while removing product", error);
+      toast.error("Error occurred while removing product");
+    }
+  }
+
+  const handleDeleteProductId = (id) => {
+    setDeleteProductId(id);
+    setShowModal(true);
+}
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setDeleteProductId(null);
+  }
   const handlePageChange = (page) => {
     setCurrentPage(page);
   }
@@ -64,6 +99,11 @@ const Product = () => {
         <AddButton btnName="Add Product" pathlink="/add-product" />
         {loading ? <Spinner /> :
           <div className=' pt-3'>
+            <DeleteModal
+              show={showModal}
+              onClose={handleCloseModal}
+              onConfirm={removeProduct}
+            />
             <table className='table table-hover caption-top'>
               <caption>List of Products</caption>
               <thead className=' table-info'>
@@ -90,7 +130,7 @@ const Product = () => {
                           <div className='d-flex justify-content-between'>
                             <Link to={`/product-info/${product.productId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
                             <Link to={`/update-product/${product.productId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
-                            <AiFillDelete className='fs-4 text-danger' />
+                            <AiFillDelete className='fs-4 text-danger' onClick={() => handleDeleteProductId(product.productId)}/>
                           </div>
                         </td>
                       </tr>

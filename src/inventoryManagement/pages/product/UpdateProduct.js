@@ -45,7 +45,7 @@ const UpdateProduct = () => {
   const fetchProductById = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/product/fetch-product/${id}`, {
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/product/fetch-product/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -55,8 +55,8 @@ const UpdateProduct = () => {
       setFetchedProduct(res.data.Product);
       const tempProduct = res.data.Product;
       product.name = tempProduct.name;
-      product.brandId = tempProduct.brand.brandId;
-      product.colorId = tempProduct.color.colorId;
+      product.brandId = tempProduct.brand.id;
+      product.colorId = tempProduct.color.id;
       product.description = tempProduct.description;
       product.details = tempProduct.details;
       product.quantity = tempProduct.quantity;
@@ -64,6 +64,7 @@ const UpdateProduct = () => {
       product.currentPrice = tempProduct.currentPrice;
       product.previousPrice = tempProduct.previousPrice;
 
+      console.log("lejwlkjrljwer", res.data.Product);
       setSpecificationValues(tempProduct.specifications.map(spec => ({
         value: spec.value,
         nameId: spec.nameId
@@ -80,24 +81,20 @@ const UpdateProduct = () => {
     }
   }
 
+  useEffect(() =>{
+    console.log("product ", product);
+  }, [product])
+
   const fetchBrandAndColor = async () => {
     setLoading(true);
     try {
-      const productColors = await axios.get(`http://localhost:9090/api/v1/admin/color/colors-list`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const productColors = await axios.get(`http://localhost:9090/api/v1/noauth/color/colors-list`, {
         params: {
           page: 0,
           size: 10
         }
       });
-      const productBrands = await axios.get(`http://localhost:9090/api/v1/admin/brand/brands-list`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const productBrands = await axios.get(`http://localhost:9090/api/v1/noauth/brand/brands-list`, {
         params: {
           page: 0,
           size: 10
@@ -120,12 +117,7 @@ const UpdateProduct = () => {
   const fetchSpecificationNameBySubcategoryId = async (subcategoryId) => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/spec-name/get-names/${subcategoryId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
-      })
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/spec-name/get-names/${subcategoryId}`);
       setLoading(false);
       setSpecificationNames(res.data.SpecificationName);
       const specNames = res.data.SpecificationName;
@@ -272,7 +264,7 @@ const UpdateProduct = () => {
                 {
                   brands.map((productBrand, index) => {
                     return (
-                      <option key={index} value={productBrand.brandId}>{productBrand.brand}</option>
+                      <option key={index} value={productBrand.id}>{productBrand.name}</option>
                     )
                   })
                 }
@@ -291,7 +283,7 @@ const UpdateProduct = () => {
                 {
                   colors.map((productColor, index) => {
                     return (
-                      <option key={index} value={productColor.colorId}>{productColor.color}</option>
+                      <option key={index} value={productColor.id}>{productColor.name}</option>
                     )
                   })
                 }

@@ -24,12 +24,7 @@ const UpdateCategory = () => {
   const fetchCategoryById = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/category/get-category/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
-      })
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/category/get-category/${id}`);
       setLoading(false);
       setCategory({
         name: res.data.Category?.name,

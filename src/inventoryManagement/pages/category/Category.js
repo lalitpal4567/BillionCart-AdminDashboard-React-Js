@@ -24,17 +24,13 @@ const Category = () => {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
 
-  localStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDEiLCJpYXQiOjE3MjAyOTQ5MDAsImV4cCI6MTcyMDg5OTcwMH0.F6-yY5NPPTb68hKMqf0HGa-nBINtFxZorYcfthRZwNSmOyTC10u6dVQR9dnvLCZZRlZVJk-wFFA_JJGJmJ2m4A");
+  localStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDEiLCJpYXQiOjE3MjA3NjQ5NjQsImV4cCI6MTcyMTM2OTc2NH0.buA7AIZwzkGhGSf8Ee_Ks6BLlaJ7SP-yqJ6A7xhaRJj5NPbzxQgh74TwQBK6yvQLF59porU920i-WQkvJPp0MQ");
   const token = localStorage.getItem('token');
 
   const fetchCategories = async () => {
     setLoading(true);
    try {
-     const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
-       headers: {
-         'Authorization': `Bearer ${token}`,
-         'Content-Type': 'application/json',
-       },
+     const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
        params: {
          page: currentPage,
          size: pageSize

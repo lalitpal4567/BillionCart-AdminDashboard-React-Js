@@ -18,8 +18,8 @@ const calculateDiscount = (currentPrice, previousPrice) => {
 };
 
 const PriceTag = ({style, className, currentPrice, previousPrice }) => {
-    const discount = calculateDiscount(currentPrice, previousPrice).toFixed(2).replace(/\.?0+$/, '');
-    const tag = `d-flex justify-content-start align-items-center gap-3 flex-wrap ${className}`
+    const discount = calculateDiscount(currentPrice, previousPrice).toFixed(0);
+    const tag = `d-flex justify-content-start align-items-end gap-3 flex-wrap ${className}`
     return (
         <div className={tag} style={{fontSize: "17px", backgroundColor: style?.backgroundColor}}>
             <span className='currentPrice'>
@@ -28,7 +28,7 @@ const PriceTag = ({style, className, currentPrice, previousPrice }) => {
             <span className='label text-light-emphasis'>
                 <CurrencyFormatter price={previousPrice} />
             </span>
-            <span className='discount'>{discount}%off</span>
+            <span className='discount'>{discount}% Off</span>
         </div>
     );
 }

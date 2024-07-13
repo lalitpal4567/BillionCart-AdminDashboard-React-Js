@@ -52,7 +52,7 @@ const AddProduct = () => {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/category/categories-list`, {
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/category/categories-list`, {
         params: {
           page: 0,
           size: 10
@@ -69,24 +69,16 @@ const AddProduct = () => {
   const fetchBrandAndColor = async () => {
     setLoading(true);
     try {
-      const productColors = await axios.get(`http://localhost:9090/api/v1/admin/color/colors-list`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const productColors = await axios.get(`http://localhost:9090/api/v1/noauth/color/colors-list`, {
         params: {
           page: 0,
           size: 10
         }
       });
-      const productBrands = await axios.get(`http://localhost:9090/api/v1/admin/brand/brands-list`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const productBrands = await axios.get(`http://localhost:9090/api/v1/noauth/brand/brands-list`, {
         params: {
           page: 0,
-          size: 10
+          size: 20
         }
       });
       setLoading(false);
@@ -107,11 +99,7 @@ const AddProduct = () => {
     if (!categoryId) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/subcategory/subcategories-category/${categoryId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/subcategories-category/${categoryId}`, {
         params: {
           page: 0,
           size: 10
@@ -133,11 +121,7 @@ const AddProduct = () => {
     if (!subcategoryId) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:9090/api/v1/admin/spec-name/get-names/${subcategoryId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.get(`http://localhost:9090/api/v1/noauth/spec-name/get-names/${subcategoryId}`, {
         params: {
           page: 0,
           size: 20
@@ -416,7 +400,7 @@ const AddProduct = () => {
                     {
                       brands.map((productBrand, index) => {
                         return (
-                          <option key={index} value={productBrand.brandId}>{productBrand.brand}</option>
+                          <option key={index} value={productBrand.id}>{productBrand.name}</option>
                         )
                       })
                     }
@@ -436,7 +420,7 @@ const AddProduct = () => {
                     {
                       colors.map((productColor, index) => {
                         return (
-                          <option key={index} value={productColor.colorId}>{productColor.color}</option>
+                          <option key={index} value={productColor.id}>{productColor.name}</option>
                         )
                       })
                     }

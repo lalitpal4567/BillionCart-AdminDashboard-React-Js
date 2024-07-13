@@ -17,7 +17,7 @@ const ProductInfo = () => {
 
   const fetchProductById = async () => {
     setLoading(true);
-    const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/product/fetch-product/${id}`);
+    const res = await axios.get(`http://localhost:9090/api/v1/noauth/product/fetch-product/${id}`);
     setLoading(false);
     setProduct(res.data.Product);
   }

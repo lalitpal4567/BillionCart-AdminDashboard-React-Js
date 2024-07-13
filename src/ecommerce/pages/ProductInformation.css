@@ -1,0 +1,30 @@
+
+.add-to-cart-btn{
+    background-color: #FFA62F;
+}
+.buy-now-btn{
+    background-color: #03AED2;
+}
+.add-to-cart-btn:hover {
+    background-color: #03AED2;
+}
+
+.buy-now-btn:hover {
+    background-color: #FFA62F;
+}
+
+.sticky-element {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 70px; /* Adjust this value as needed */
+    z-index: 1000; /* Ensure it stays on top */
+    background-color: white; /* Optional: To ensure the background is not transparent */
+}
+
+.star-rating-position{
+    position:absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}

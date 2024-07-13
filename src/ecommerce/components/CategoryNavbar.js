@@ -7,7 +7,7 @@ const CategoryNavbar = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
+      const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
         params: {
           page: 0,
           size: 10
@@ -22,9 +22,9 @@ const CategoryNavbar = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
-
+ 
   return (
-    <div className=' d-flex justify-content-center gap-5'>
+    <div className=' d-flex justify-content-center gap-5' style={{paddingTop: "70px"}}>
       {
         categories.map((category, index) => {
           return (

@@ -7,7 +7,7 @@ const CategoryGroup = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/noauth/category/categories-list", {
+            const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
                 params: {
                     page: 0,
                     size: 10

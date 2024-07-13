@@ -29,11 +29,7 @@ const Color = () => {
     const fetchColors = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/color/colors-list", {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const res = await axios.get("http://localhost:9090/api/v1/noauth/color/colors-list", {
                 params: {
                     page: currentPage,
                     size: pageSize
@@ -52,38 +48,14 @@ const Color = () => {
         fetchColors();
     }, [currentPage]);
 
+    useEffect(() => {
+        console.log("colors", colors);
+    }, [colors]);
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     }
 
-    const handleConfirmDelete = async () => {
-        setLoading(true);
-        try {
-            await axios.delete(`http://localhost:9090/api/v1/admin/color/remove-color/${deleteColorId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-            setLoading(false);
-            handleCloseModal();
-            toast.success("Brand deleted successfully!");
-            fetchColors();
-        } catch (error) {
-            console.error("Error while deleting the color:", error);
-            toast.error("Error while deleting color");
-            setLoading(false);
-        }
-    }
-
-    const handleDeleteColorId = (id) => {
-        setDeleteColorId(id);
-        setShowModal(true);
-    }
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setDeleteColorId('');
-    }
     return (
         <div className='p-2'>
             <h1 className=' text-center'>Color Management</h1>
@@ -91,11 +63,6 @@ const Color = () => {
                 <AddButton btnName="Add Color" pathlink="/add-color" />
                 {loading ? <Spinner /> :
                     <div className='pt-3'>
-                        <DeleteModal
-                            show={showModal}
-                            onClose={handleCloseModal}
-                            onConfirm={handleConfirmDelete}
-                        />
                         <form>
                             <table className='table table-hover caption-top'>
                                 <caption>List of colors</caption>
@@ -112,12 +79,11 @@ const Color = () => {
                                             return (
                                                 <tr key={index} className='' style={{ cursor: "pointer" }}>
                                                     <th>{index + 1}</th>
-                                                    <td>{productColor.color}</td>
+                                                    <td>{productColor.name}</td>
                                                     <td>
                                                         <div className='d-flex justify-content-between'>
-                                                            <Link to={`/color-info/${productColor.colorId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
-                                                            <Link to={`/update-color/${productColor.colorId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
-                                                            <AiFillDelete onClick={() => handleDeleteColorId(productColor.colorId)} className='fs-4 text-danger' />
+                                                            <Link to={`/color-info/${productColor.id}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                                                            <Link to={`/update-color/${productColor.id}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
                                                         </div>
                                                     </td>
                                                 </tr>

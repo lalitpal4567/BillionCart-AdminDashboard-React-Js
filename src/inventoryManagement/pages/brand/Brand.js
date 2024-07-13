@@ -13,9 +13,6 @@ import Spinner from '../../components/Spinner';
 import DeleteModal from '../../components/DeleteModal';
 
 
-
-
-
 const Brand = () => {
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -31,11 +28,7 @@ const Brand = () => {
     const fetchBrands = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/admin/brand/brands-list", {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const res = await axios.get("http://localhost:9090/api/v1/noauth/brand/brands-list", {
                 params: {
                     page: currentPage,
                     size: pageSize
@@ -114,12 +107,12 @@ const Brand = () => {
                                             return (
                                                 <tr key={index} className='' style={{ cursor: "pointer" }}>
                                                     <th>{index + 1}</th>
-                                                    <td>{productBrand.brand}</td>
+                                                    <td>{productBrand.name}</td>
                                                     <td>
                                                         <div className='d-flex justify-content-between'>
-                                                            <Link to={`/brand-info/${productBrand.brandId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
-                                                            <Link to={`/update-brand/${productBrand.brandId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
-                                                            <AiFillDelete onClick={() => handleDeleteBrandId(productBrand.brandId)} className='fs-4 text-danger' />
+                                                            <Link to={`/brand-info/${productBrand.id}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                                                            <Link to={`/update-brand/${productBrand.id}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
+                                                            <AiFillDelete onClick={() => handleDeleteBrandId(productBrand.id)} className='fs-4 text-danger' />
                                                         </div>
                                                     </td>
                                                 </tr>

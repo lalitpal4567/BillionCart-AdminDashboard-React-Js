@@ -8,7 +8,7 @@ const CategoryCard = ({keyIndex, category}) => {
 
     const fetchSubcategoryByCategoryId = async() =>{
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/subcategory/subcategories-category/${category.categoryId}`, {
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/subcategories-category/${category.categoryId}`, {
                 params: {
                     page: 0,
                     size: 10

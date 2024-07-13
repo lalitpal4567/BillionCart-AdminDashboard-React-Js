@@ -1,0 +1,27 @@
+.description-text{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 1;
+    height: 1.5em;
+    line-height: 1.5em;
+    font-weight: 500;
+}
+.quantity-btn{
+    background-color: #ffffff;
+    width: 40px;
+    border-color: #dfdfdf;
+    border-style: solid;
+    color: white;
+    border-radius: 10%;    
+}
+
+.sticky-element {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 70px;
+    z-index: 1000;
+    background-color: white;
+}

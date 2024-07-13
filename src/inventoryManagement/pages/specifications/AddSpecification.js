@@ -21,11 +21,7 @@ const AddSpecification = () => {
 
     const fetchCategories = async () => {
         setLoading(true);
-        const res = await axios.get("http://localhost:9090/api/v1/admin/category/categories-list", {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
+        const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
             params: {
                 page: 0,
                 size: 20
@@ -39,11 +35,7 @@ const AddSpecification = () => {
         if (!categoryId) return;
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/subcategory/subcategories-categories/${categoryId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/subcategories-category/${categoryId}`, {
                 params: {
                     page: 0,
                     size: 10
@@ -120,7 +112,7 @@ const AddSpecification = () => {
         <div className='p-2'>
             <div className='d-flex justify-content-center'>
                 <BackButton to="/specification-info" />
-                <h1 className='mx-auto'>Add Specification</h1>
+                <h1 className='mx-auto'>Add Product Specification</h1>
             </div>
             <div className='p-3'>
                 {loading ? <Spinner /> :
