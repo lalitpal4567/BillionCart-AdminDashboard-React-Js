@@ -7,10 +7,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BackButton from '../../components/BackButton';
 import Spinner from '../../components/Spinner';
+import AlertMessageModal from '../../components/AlertMessageModal';
+import DeleteModal from '../../components/DeleteModal';
 
 const CarouselImage = () => {
     const [loading, setLoading] = useState(false);
     const [carouselImages, setCarouselImages] = useState([]);
+    const [DeleteCarouselImageId, setDeleteCarouselImageId] = useState(null);
+
+    const [isFileSizeExceeded, setIsFileSizeExceeded] = useState([false]);
+    const [isAllFilesSelected, setIsAllFilesSelected] = useState(false);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showAlertModal, setShowAlertModal] = useState(false);
+
     const [imageFiles, setImageFiles] = useState([{ imageFile: null }])
     const [altTexts, setAltTexts] = useState([{
         altText: ""
@@ -23,7 +33,7 @@ const CarouselImage = () => {
     const fetchCarouselImages = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/admin/noauth/carousel-images-list`, {
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/carousel/carousel-images-list`, {
                 params: {
                     page: 0,
                     size: 10
@@ -41,9 +51,23 @@ const CarouselImage = () => {
         fetchCarouselImages();
     }, []);
 
+    useEffect(() => {
+        checkAllFilesSelected();
+    }, [imageFiles]);
+
+    useEffect(() =>{
+        console.log("china", carouselImages);
+    }, [carouselImages])
+
     const addCarouselImages = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        if (isFileSizeExceeded.some(exceeded => exceeded)) {
+            setLoading(false);
+            setShowAlertModal(true);
+            return;
+        }
 
         const formData = new FormData();
         formData.append('altTexts', new Blob([JSON.stringify(altTexts)], { type: 'application/json' }));
@@ -54,7 +78,7 @@ const CarouselImage = () => {
         });
 
         try {
-            const res = await axios.post(`http://localhost:9090/api/v1/admin/add-carousel-image`, formData, {
+            const res = await axios.post(`http://localhost:9090/api/v1/admin/carousel/add-carousel-image`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -94,12 +118,22 @@ const CarouselImage = () => {
         const newAltTexts = [...altTexts];
 
         if (type === "file") {
-            newImageFiles[index] = { ...newImageFiles[index], imageFile: files[0] };
+            if (files && files[0]) {
+                const file = files[0];
+                const maxSizeInBytes = 1 * 1024 * 1024;
+
+                newImageFiles[index] = { ...newImageFiles[index], imageFile: files[0] };
+                const isExceeded = file.size > maxSizeInBytes;
+                const updatedSizeExceeded = [...isFileSizeExceeded];
+                updatedSizeExceeded[index] = isExceeded;
+
+                setImageFiles(newImageFiles);
+                setIsFileSizeExceeded(updatedSizeExceeded);
+            }
         }
-        if (type === "text") {
+        else if (type === "text") {
             newAltTexts[index] = { ...newAltTexts[index], altText: value };
         }
-        setImageFiles(newImageFiles);
         setAltTexts(newAltTexts);
     };
 
@@ -111,13 +145,30 @@ const CarouselImage = () => {
     const handleRemoveImageField = (index) => {
         const updatedImageFiles = imageFiles.filter((_, i) => i !== index);
         const updatedAltTexts = altTexts.filter((_, i) => i !== index);
+        const updatedSizeExceeded = isFileSizeExceeded.filter((_, i) => i !== index);
+
         setImageFiles(updatedImageFiles);
         setAltTexts(updatedAltTexts);
+        setIsFileSizeExceeded(updatedSizeExceeded);
+        checkAllFilesSelected();
     };
 
+    const checkAllFilesSelected = () => {
+        const allSelected = imageFiles.every(file => file.imageFile !== null);
+        setIsAllFilesSelected(allSelected);
+    };
+
+    const handleCloseModal = () => {
+        setShowDeleteModal(false);
+        setShowAlertModal(false);
+        setDeleteCarouselImageId(null);
+    }
+
     const handleResetImages = () => {
-        setImageFiles({ imageFile: null });
-        setAltTexts({ altText: "" });
+        setImageFiles([{ imageFile: null }]);
+        setAltTexts([{ altText: "" }]);
+        setIsFileSizeExceeded([false]);
+        setIsAllFilesSelected(false);
     }
 
     return (
@@ -128,6 +179,15 @@ const CarouselImage = () => {
             </div>
             {loading ? <Spinner /> :
                 <div className='overflow-y-scroll' style={{ height: "450px" }}>
+                    <AlertMessageModal
+                        onClose={handleCloseModal}
+                        show={showAlertModal}
+                    />
+                    <DeleteModal
+                        show={showDeleteModal}
+                        onClose={handleCloseModal}
+                        onConfirm={removeCarouselImage}
+                    />
                     <div className=' d-flex flex justify-content-evenly ' >
                         <div className=' border border-3 border-light-subtle p-2' style={{ width: "50%" }}>
                             {
@@ -158,6 +218,7 @@ const CarouselImage = () => {
                                                     <input
                                                         type="file"
                                                         className="form-control"
+                                                        required
                                                         id="inputImageFile"
                                                         name="imageFile"
                                                         ref={fileInputRef}
@@ -177,6 +238,9 @@ const CarouselImage = () => {
                                                             value={altTexts[index].altText || ""}
                                                             onChange={(e) => handleCarouselImageAltTextInputChange(index, e)}
                                                         />
+                                                        {index === 0 && isFileSizeExceeded[index] &&
+                                                            <p className=' text-danger ms-3'>Size exceeded!!!</p>
+                                                        }
                                                     </div>
                                                     <div className='' style={{ width: "100%", height: "120px" }}>
                                                         <img
@@ -187,7 +251,10 @@ const CarouselImage = () => {
                                                     </div>
                                                 </div>
                                                 {index !== 0 && (
-                                                    <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveImageField(index)}>Remove</button>
+                                                    <div className=' d-flex align-items-center'>
+                                                        <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveImageField(index)}>Remove</button>
+                                                        {isFileSizeExceeded[index] && <span className=' text-danger ms-3'>Size exceeded!!!</span>}
+                                                    </div>
                                                 )}
                                             </div>
                                         ))}
@@ -195,7 +262,7 @@ const CarouselImage = () => {
                                 </div>
                                 <div className=' d-flex justify-content-center gap-4'>
                                     <button type='button' className=' btn btn-secondary' onClick={handleResetImages}>Reset</button>
-                                    <button type='submit' className=' btn btn-success'>Submit</button>
+                                    <button type='submit' className=' btn btn-success' disabled={!isAllFilesSelected}>Submit</button>
                                 </div>
                             </form>
                         </div>

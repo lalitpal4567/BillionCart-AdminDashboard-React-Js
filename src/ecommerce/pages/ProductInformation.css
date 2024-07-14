@@ -13,18 +13,18 @@
     background-color: #FFA62F;
 }
 
-.sticky-element {
-    position: -webkit-sticky; /* For Safari */
-    position: sticky;
-    top: 70px; /* Adjust this value as needed */
-    z-index: 1000; /* Ensure it stays on top */
-    background-color: white; /* Optional: To ensure the background is not transparent */
-}
-
 .star-rating-position{
     position:absolute;
     top: 12px;
     left: 12px;
     font-size: 12px;
     font-weight: bold;
+}
+
+.sticky-element {
+    position: -webkit-sticky; 
+    position: sticky;
+    top: 70px;
+    z-index: 5;
+    background-color: white;
 }

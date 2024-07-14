@@ -1,9 +1,24 @@
-.navbar-position{
+
+.fixed-element{
     position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10000; /* Ensure it stays on top of other content */
-    background-color: white; /* Optional: To ensure the background is not transparent */
-    height: 60px; /* Set the height of the navbar */
+    z-index: 10000;
+    top: 0px;
+    left: 0px;
+}
+.navbar-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 5px;
 }
 
+.flex-item{
+    flex-grow: 1;
+}
+
+@media (min-width: 590px) {
+    .flex-item{
+        order: -1;
+    }
+}

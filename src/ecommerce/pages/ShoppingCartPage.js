@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import './ShoppingCartPage.css'
-import PriceTag from '../components/PriceTag'
 
 
 import { Link} from 'react-router-dom';
@@ -13,6 +12,7 @@ const ShoppingCartPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const markedItems = cartItems.filter(item => item.isSelectedForOrder === true);
     const savedItems = cartItems.filter(item => item.isSelectedForOrder === false);
+    const totalCartItems = cartItems.length;
 
     const token = localStorage.getItem("token");
 
@@ -39,7 +39,7 @@ const ShoppingCartPage = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar totalItems={totalCartItems} />
             <div className=' container-fluid' style={{ paddingTop: "60px" }}>
                 <div className='row'>
                     <div className='col-9 border border-2 border-danger py-3'>

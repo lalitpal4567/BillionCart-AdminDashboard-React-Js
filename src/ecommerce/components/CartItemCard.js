@@ -56,6 +56,19 @@ const CartItemCard = ({ cartItem, sectionName }) => {
         }
     }
 
+    const addProductToWishlist = async () =>{
+        try {
+            const res = await axios.post(`http://localhost:9090/api/v1/user/wishlist/add-wishlist-item/${cartItem.productId}`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            removeCartItemFromCart();
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
     const handleIncreaseQuantity = () => {
         const newQuantity = currentQuantity + 1;
         setCurrentQuantity(newQuantity);
@@ -100,7 +113,7 @@ const CartItemCard = ({ cartItem, sectionName }) => {
                         <div className=' d-flex justify-content-between  mt-3'>
                             <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#FFA62F" }} onClick={removeCartItemFromCart}>REMOVE FROM CART</button>
                             <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#03AED2" }} onClick={handleToggleMarkCartItemForOrder}>{sectionName}</button>
-                            <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#03AED2" }}>ADD TO WISHLIST</button>
+                            <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#03AED2" }} onClick={addProductToWishlist}>MOVE TO WISHLIST</button>
                         </div>
                     </div>
                 </div>
