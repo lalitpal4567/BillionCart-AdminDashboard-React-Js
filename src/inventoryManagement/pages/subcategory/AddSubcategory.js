@@ -29,7 +29,8 @@ const AddSubcategory = () => {
   const pageSize = 10;
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -82,7 +83,7 @@ const AddSubcategory = () => {
 
       setLoading(false);
       toast.success("Subcategory added successfully!");
-      setTimeout(() => navigate("/subcategory"), 2000);
+      setTimeout(() => navigate("../subcategory"), 2000);
     } catch (error) {
       console.log("Error occurred while adding subcategory: ", error);
       toast.error(error);
@@ -151,15 +152,19 @@ const AddSubcategory = () => {
       name: '',
       description: '',
     });
-    setImageFiles({
+    setImageFiles([{
       imageFile: null
-    })
+    }])
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }
 
   return (
     <div className=' p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/subcategory" className="" />
+        <BackButton to="/admin-dashboard/subcategory" className="" />
         <h1 className='text-center mx-auto'>Add Subcategory</h1>
       </div>
       {loading ? <Spinner /> :

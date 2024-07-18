@@ -7,13 +7,8 @@ const CategoryGroup = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
-                params: {
-                    page: 0,
-                    size: 10
-                }
-            });
-            setCategories(res.data.content);
+            const res = await axios.get("http://localhost:9090/api/v1/noauth/category/active-categories-list");
+            setCategories(res.data.Categories);
         } catch (error) {
             console.log("error while fetching categories", error);
         }

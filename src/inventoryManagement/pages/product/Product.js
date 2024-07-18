@@ -20,12 +20,13 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
 
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -84,7 +85,23 @@ const Product = () => {
   const handleDeleteProductId = (id) => {
     setDeleteProductId(id);
     setShowModal(true);
-}
+  }
+
+  const changeProductVisibilityStatus = async (productId) => {
+    setLoading(true);
+    try {
+      const res = await axios.put(`http://localhost:9090/api/v1/admin/product/change-product-active-status/${productId}`, {}, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      setLoading(false);
+      fetchProducts();
+    } catch (error) {
+      setLoading(false);
+      console.log("error", error);
+    }
+  }
   const handleCloseModal = () => {
     setShowModal(false);
     setDeleteProductId(null);
@@ -96,7 +113,7 @@ const Product = () => {
     <div className=' py-2'>
       <h1 className=' text-center'>Product Management</h1>
       <div className=' p-3'>
-        <AddButton btnName="Add Product" pathlink="/add-product" />
+        <AddButton btnName="Add Product" pathlink="/admin-dashboard/product/add-product" />
         {loading ? <Spinner /> :
           <div className=' pt-3'>
             <DeleteModal
@@ -112,7 +129,8 @@ const Product = () => {
                   <th scope="col">Product Name</th>
                   <th scope="col">Description</th>
                   <th scope="col">Quantity</th>
-                  <th scope='col'>Current Price</th>
+                  <th scope='col'>Price</th>
+                  <th scope='col'>Status</th>
                   <th scope='col'>Actions</th>
                 </tr>
               </thead>
@@ -125,12 +143,18 @@ const Product = () => {
                         <td>{product.name}</td>
                         <td className='text-truncate ' style={{ maxWidth: '300px' }}>{product.description}</td>
                         <td className='text-truncate ' style={{ maxWidth: '300px' }}>{product.quantity}</td>
-                        <td className='text-truncate ' style={{ maxWidth: '300px' }}>{product.currentPrice}</td>
+                        <td className='text-truncate ' style={{ maxWidth: '300px' }}>{product.price}</td>
+                        <td className='text-truncate ' style={{ maxWidth: '300px' }}>
+                          <button className="btn"
+                            style={product.active ? { backgroundColor: "#FFA62F" } : { backgroundColor: "#ADC4CE" }} onClick={() => changeProductVisibilityStatus(product.productId)}>
+                            {product.active ? "Enabled" : "Disabled"}
+                          </button>
+                        </td>
                         <td>
                           <div className='d-flex justify-content-between'>
-                            <Link to={`/product-info/${product.productId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
-                            <Link to={`/update-product/${product.productId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
-                            <AiFillDelete className='fs-4 text-danger' onClick={() => handleDeleteProductId(product.productId)}/>
+                            <Link to={`/admin-dashboard/product/product-info/${product.productId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                            <Link to={`/admin-dashboard/product/update-product/${product.productId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
+                            <AiFillDelete className='fs-4 text-danger' onClick={() => handleDeleteProductId(product.productId)} />
                           </div>
                         </td>
                       </tr>

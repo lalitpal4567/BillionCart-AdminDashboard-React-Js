@@ -8,13 +8,8 @@ const CategoryCard = ({keyIndex, category}) => {
 
     const fetchSubcategoryByCategoryId = async() =>{
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/subcategories-category/${category.categoryId}`, {
-                params: {
-                    page: 0,
-                    size: 10
-                }
-            })
-            setSubcategories(res.data.content);
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/active-subcategory/subcategories-list-category/${category.categoryId}`);
+            setSubcategories(res.data.Subcategories);
         } catch (error) {
             console.log("error while fetching subcategories", error);
         }

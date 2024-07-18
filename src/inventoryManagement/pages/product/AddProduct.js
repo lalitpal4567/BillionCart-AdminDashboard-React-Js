@@ -30,8 +30,7 @@ const AddProduct = () => {
     details: "",
     brandId: "",
     colorId: "",
-    currentPrice: "",
-    previousPrice: "",
+    price: "",
     quantity: "",
     model: ""
   })
@@ -47,7 +46,8 @@ const AddProduct = () => {
 
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -175,7 +175,7 @@ const AddProduct = () => {
       })
       setLoading(false);
       toast.success("Product added successfully!");
-      setTimeout(() => navigate("/product"), 2000);
+      setTimeout(() => navigate("../product"), 2000);
     } catch (error) {
       setLoading(false);
       console.log("Error while adding product:", error);
@@ -200,7 +200,7 @@ const AddProduct = () => {
       if (files && files[0]) {
         const file = files[0];
         const maxSizeInBytes = 1 * 1024 * 1024;
-        
+
         newImageFiles[index] = { ...newImageFiles[index], imageFile: files[0] };
         const isExceeded = file.size > maxSizeInBytes;
         const updatedSizeExceeded = [...isFileSizeExceeded];
@@ -286,7 +286,7 @@ const AddProduct = () => {
   return (
     <div className=' p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/product" className="" />
+        <BackButton to="/admin-dashboard/product" className="" />
         <h1 className='text-center mx-auto'>Add Product</h1>
       </div>
       {loading ? <Spinner /> :
@@ -430,7 +430,7 @@ const AddProduct = () => {
                   <table className="table table-borderless">
                     <tbody>
                       <tr className=''>
-                        <th scope="row">Current Price
+                        <th scope="row">Price
                           <span style={{ color: 'red' }}>*</span>
                         </th>
                         <td>
@@ -438,22 +438,8 @@ const AddProduct = () => {
                             type='text'
                             className='form-control'
                             required
-                            name="currentPrice"
-                            value={product.currentPrice}
-                            onChange={handleProductInputChange}
-
-                          />
-                        </td>
-                      </tr>
-                      <tr className=''>
-                        <th scope="row">Previous Price</th>
-                        <td>
-                          <input
-                            type='text'
-                            className='form-control'
-                            required
-                            name="previousPrice"
-                            value={product.previousPrice}
+                            name="price"
+                            value={product.price}
                             onChange={handleProductInputChange}
                           />
                         </td>

@@ -28,7 +28,8 @@ const UpdateProductImage = () => {
 
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const { id } = useParams();
 
     const fetchProductImages = async () => {
@@ -172,7 +173,7 @@ const UpdateProductImage = () => {
     return (
         <div className='p-2 border border-2 border-danger'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/product" />
+                <BackButton to="/admin-dashboard/product" />
                 <h1 className='mx-auto'>Add Product Images</h1>
             </div>
             {loading ? <Spinner /> :

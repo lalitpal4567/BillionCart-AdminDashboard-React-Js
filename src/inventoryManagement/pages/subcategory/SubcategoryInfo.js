@@ -9,7 +9,7 @@ const SubcategoryInfo = () => {
   const [subcategory, setSubcategory] = useState({});
   const { id } = useParams();
 
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
 
   const fetchSubcategoryById = async () => {
     setLoading(true);
@@ -31,7 +31,7 @@ const SubcategoryInfo = () => {
   return (
     <div className=' p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/subcategory" />
+        <BackButton to="/admin-dashboard/subcategory" />
         <h1 className='mx-auto'>Subcategory Information</h1>
       </div>
       {loading ? <Spinner /> :
@@ -129,7 +129,7 @@ const SubcategoryInfo = () => {
       }
       <section className=' p-2 d-flex justify-content-center gap-3'>
         <button className='btn btn-danger px-4'>Delete</button>
-        <Link to={`/update-subcategory/${subcategory.subcategoryId}`} className='btn btn-info px-4'>Update</Link>
+        <Link to={`/admin-dashboard/subcategory/update-subcategory/${subcategory.subcategoryId}`} className='btn btn-info px-4'>Update</Link>
       </section>
     </div>
   )

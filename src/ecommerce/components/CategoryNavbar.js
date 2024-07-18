@@ -7,13 +7,8 @@ const CategoryNavbar = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:9090/api/v1/noauth/category/categories-list", {
-        params: {
-          page: 0,
-          size: 10
-        }
-      });
-      setCategories(res.data.content);
+      const res = await axios.get("http://localhost:9090/api/v1/noauth/category/active-categories-list");
+      setCategories(res.data.Categories);
     } catch (error) {
       console.log("error while fetching categories", error);
     }
@@ -23,12 +18,16 @@ const CategoryNavbar = () => {
     fetchCategories();
   }, []);
  
+  useEffect(() =>{
+    console.log("hello hi ", categories);
+  }, [categories]);
+
   return (
     <div className=' d-flex justify-content-center gap-5' style={{paddingTop: "70px"}}>
       {
         categories.map((category, index) => {
           return (
-            <CategoryButton category={category} />
+            <CategoryButton key={index} keyIndex={index} category={category} />
           )
         })
       }

@@ -21,8 +21,7 @@ const UpdateProduct = () => {
     details: "",
     brandId: "",
     colorId: "",
-    currentPrice: "",
-    previousPrice: "",
+    price: "",
     quantity: "",
     model: ""
   })
@@ -40,7 +39,8 @@ const UpdateProduct = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const fetchProductById = async () => {
     setLoading(true);
@@ -61,8 +61,7 @@ const UpdateProduct = () => {
       product.details = tempProduct.details;
       product.quantity = tempProduct.quantity;
       product.model = tempProduct.model;
-      product.currentPrice = tempProduct.currentPrice;
-      product.previousPrice = tempProduct.previousPrice;
+      product.price = tempProduct.price;
 
       console.log("lejwlkjrljwer", res.data.Product);
       setSpecificationValues(tempProduct.specifications.map(spec => ({
@@ -162,9 +161,10 @@ const UpdateProduct = () => {
           'Content-Type': 'application/json',
         }
       })
+      console.log("ghv", res.data);
       setLoading(false);
       toast.success("Product updated successfully!");
-      setTimeout(() => navigate("/product"), 2000);
+      setTimeout(() => navigate("../product"), 2000);
     } catch (error) {
       setLoading(false);
       console.log("Error while updating product", error);
@@ -182,7 +182,7 @@ const UpdateProduct = () => {
   return (
     <div className='p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/product" />
+        <BackButton to="/admin-dashboard/product" />
         <h1 className='mx-auto'>Update Product</h1>
       </div>
       {loading ? <Spinner /> :
@@ -294,34 +294,18 @@ const UpdateProduct = () => {
                 <tbody>
                   <tr className=''>
                     <th scope="row">
-                      <label htmlFor="inputCurrentPrice" className="form-label">Current Price</label>
+                      <label htmlFor="inputPrice" className="form-label">Price</label>
                     </th>
                     <td>
                       <input
                         type='text'
                         className='form-control'
-                        id="inputCurrentPrice"
+                        id="inputPrice"
                         required
-                        name="currentPrice"
-                        value={product.currentPrice || ""}
+                        name="price"
+                        value={product.price || ""}
                         onChange={handleProductInputChange}
 
-                      />
-                    </td>
-                  </tr>
-                  <tr className=''>
-                    <th scope="row">
-                      <label htmlFor="inputPreviousPrice" className="form-label">Previous Price</label>
-                    </th>
-                    <td>
-                      <input
-                        type='text'
-                        className='form-control'
-                        id="inputPreviousPrice"
-                        required
-                        name="previousPrice"
-                        value={product.previousPrice || ""}
-                        onChange={handleProductInputChange}
                       />
                     </td>
                   </tr>
@@ -381,7 +365,7 @@ const UpdateProduct = () => {
               </table>
             </div>
             <div className='d-flex justify-content-center gap-4'>
-              <Link to={`/update-product-image/${id}`} className="btn btn-info px-4">Update Images</Link>
+              <Link to={`/admin-dashboard/product/update-product-image/${id}`} className="btn btn-info px-4">Update Images</Link>
               <button type="button" className="btn px-4" onClick={handleReset} style={{ backgroundColor: "orange" }}>Reset</button>
               <button type="submit" className="btn btn-success px-4">Submit</button>
             </div>

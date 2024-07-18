@@ -16,7 +16,7 @@ const SpecificationInfo = () => {
   const [subcategoryId, setSubcategoryId] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -103,7 +103,7 @@ const SpecificationInfo = () => {
     <div className=' py-2'>
       <h1 className='text-center mx-auto'>Specification Management</h1>
       <div className=' p-3'>
-        <AddButton btnName="Add Specification" pathlink="/add-specification" />
+        <AddButton btnName="Add Specification" pathlink="/admin-dashboard/specification/add-specification" />
         {loading ? <Spinner /> :
           <div className=' pt-3'>
             <form className=' w-50'>
@@ -158,7 +158,7 @@ const SpecificationInfo = () => {
                         <td>{spec.name}</td>
                         <td>
                           <div className='d-flex justify-content-between'>
-                            <Link to={`/update-specification/${subcategoryId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
+                            <Link to={`/admin-dashboard/specification/update-specification/${subcategoryId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
                             <AiFillDelete className='fs-4 text-danger' />
                           </div>
                         </td>

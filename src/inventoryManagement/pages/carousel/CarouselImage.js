@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Carousel from '../../../ecommerce/components/Carousel';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -28,7 +27,8 @@ const CarouselImage = () => {
 
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchCarouselImages = async () => {
         setLoading(true);
@@ -51,13 +51,11 @@ const CarouselImage = () => {
         fetchCarouselImages();
     }, []);
 
+
     useEffect(() => {
         checkAllFilesSelected();
     }, [imageFiles]);
 
-    useEffect(() =>{
-        console.log("china", carouselImages);
-    }, [carouselImages])
 
     const addCarouselImages = async (e) => {
         e.preventDefault();
@@ -87,7 +85,8 @@ const CarouselImage = () => {
 
             setLoading(false);
             toast.success("Carousel images added successfully!");
-            setTimeout(() => navigate(`/carousel`), 2000);
+            fetchCarouselImages();
+            handleResetImages();
         } catch (error) {
             console.log("Error while adding carousel images: ", error);
             toast.error("Error while adding carousel images");
@@ -98,13 +97,14 @@ const CarouselImage = () => {
     const removeCarouselImage = async (imageId) => {
         setLoading(true);
         try {
-            const res = await axios.delete(`http://localhost:9090/api/v1/admin/remove-carousel-image/${imageId}`, {
+            const res = await axios.delete(`http://localhost:9090/api/v1/admin/carousel/remove-carousel-image/${imageId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
             setLoading(false);
             toast.success("Carousel image removed successfully");
+            fetchCarouselImages();
         } catch (error) {
             setLoading(false);
             console.log("Error while removing carousel image", error);
@@ -120,7 +120,7 @@ const CarouselImage = () => {
         if (type === "file") {
             if (files && files[0]) {
                 const file = files[0];
-                const maxSizeInBytes = 1 * 1024 * 1024;
+                const maxSizeInBytes = 10 * 1024 * 1024;
 
                 newImageFiles[index] = { ...newImageFiles[index], imageFile: files[0] };
                 const isExceeded = file.size > maxSizeInBytes;
@@ -174,7 +174,7 @@ const CarouselImage = () => {
     return (
         <div className='p-2 border border-2 border-danger'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/subcategory" />
+                {/* <BackButton to="/subcategory" /> */}
                 <h1 className='mx-auto'>Carousel Management</h1>
             </div>
             {loading ? <Spinner /> :

@@ -16,7 +16,8 @@ const AddColor = () => {
     const [newColor, setNewColor] = useState("");
 
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const handleAddColor = async (e) => {
         e.preventDefault();
@@ -31,7 +32,7 @@ const AddColor = () => {
             });
             setLoading(false);
             toast.success("Color added successfully");
-            setTimeout(() => navigate("/color"), 2000);
+            setTimeout(() => navigate("../color"), 2000);
         } catch (error) {
             console.log("Error while adding color", error);
             toast.error("Error while adding color");
@@ -58,7 +59,7 @@ const AddColor = () => {
     return (
         <div className='p-2'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/color" />
+                <BackButton to="/admin-dashboard/color" />
                 <h1 className='mx-auto'>Add Color</h1>
             </div>
             <div className='p-3'>

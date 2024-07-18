@@ -26,7 +26,8 @@ const Subcategory = () => {
     const [showModal, setShowModal] = useState(false);
     const pageSize = 5;
 
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchSubcategories = async () => {
         setLoading(true);
@@ -161,6 +162,23 @@ const Subcategory = () => {
         setSearchQuery(e.target.value);
     }
 
+    const changeSubcategoryVisibilityStatus = async (subcategoryId) => {
+        setLoading(true);
+
+        try {
+            const res = await axios.put(`http://localhost:9090/api/v1/admin/subcategory/change-subcategory-active-status/${subcategoryId}`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            setLoading(false);
+            fetchSubcategories();
+        } catch (error) {
+            setLoading(false);
+            console.log("error", error);
+        }
+    }
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             fetchSubcategoriesBySearchQuery(e);
@@ -194,7 +212,7 @@ const Subcategory = () => {
                             }
                         </ul>
                     </div>
-                    <AddButton btnName="Add Subcategory" pathlink="/add-subcategory" />
+                    <AddButton btnName="Add Subcategory" pathlink="/admin-dashboard/subcategory/add-subcategory" />
                     <form onSubmit={fetchSubcategoriesBySearchQuery}>
                         <div className='d-flex justify-content-evenly gap-xl-2 mb-3 align-items-center'>
                             <input
@@ -227,6 +245,7 @@ const Subcategory = () => {
                                         <th scope="col">Sr. No.</th>
                                         <th scope="col">Subcategory</th>
                                         <th scope="col">Description</th>
+                                        <th scope="col">Status</th>
                                         <th scope='col'>Actions</th>
                                     </tr>
                                 </thead>
@@ -238,10 +257,16 @@ const Subcategory = () => {
                                                     <th>{index + 1}</th>
                                                     <td>{subcategory.name}</td>
                                                     <td className='text-truncate ' style={{ maxWidth: '300px' }}>{subcategory.description}</td>
+                                                    <td className='text-truncate ' style={{ maxWidth: '300px' }}>
+                                                        <button className="btn"
+                                                            style={subcategory.active ? { backgroundColor: "#FFA62F" } : { backgroundColor: "#ADC4CE" }} onClick={() => changeSubcategoryVisibilityStatus(subcategory.subcategoryId)}>
+                                                            {subcategory.active ? "Enabled" : "Disabled"}
+                                                        </button>
+                                                    </td>
                                                     <td>
                                                         <div className='d-flex justify-content-between'>
-                                                            <Link to={`/subcategory-info/${subcategory.subcategoryId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
-                                                            <Link to={`/update-subcategory/${subcategory.subcategoryId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
+                                                            <Link to={`/admin-dashboard/subcategory/subcategory-info/${subcategory.subcategoryId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                                                            <Link to={`/admin-dashboard/subcategory/update-subcategory/${subcategory.subcategoryId}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
                                                             <AiFillDelete onClick={() => handleDeleteSubcategoryId(subcategory.subcategoryId)} className='fs-4 text-danger' />
                                                         </div>
                                                     </td>

@@ -33,6 +33,8 @@ import AddSpecification from '../specifications/AddSpecification';
 import SpecificationInfo from '../specifications/SpecificationInfo';
 import UpdateSpecification from '../specifications/UpdateSpecification';
 import UpdateSubcategoryImages from '../subcategory/UpdateSubcategoryImages';
+import DashboardPanel from '../DashboardPanel';
+import UpdateCategoryImages from '../category/UpdateCategoryImages';
 
 
 const AdminDashboard = () => {
@@ -50,42 +52,44 @@ const AdminDashboard = () => {
                 </div>
                 <div className='border border-2 border-info flex-grow-1 h-100'>
                     <Routes>
+                        <Route path='/' element={<DashboardPanel />} />
 
                         <Route path='/user' element={<User />} />
-                        <Route path='/user-info/:id' element={<UserInfo />} />
+                        <Route path='/user/user-info/:id' element={<UserInfo />} />
 
                         <Route path='/brand' element={<Brand />} />
-                        <Route path='/add-brand' element={<AddBrand />} />
-                        <Route path='/brand-info/:id' element={<BrandInfo />} />
-                        <Route path='/update-brand/:id' element={<UpdateBrand />} />
+                        <Route path='/brand/add-brand' element={<AddBrand />} />
+                        <Route path='/brand/brand-info/:id' element={<BrandInfo />} />
+                        <Route path='/brand/update-brand/:id' element={<UpdateBrand />} />
 
                         <Route path='/color' element={<Color />} />
-                        <Route path='/add-color' element={<AddColor />} />
-                        <Route path='/color-info/:id' element={<ColorInfo />} />
-                        <Route path='/update-color/:id' element={<UpdateColor />} />
+                        <Route path='/color/add-color' element={<AddColor />} />
+                        <Route path='/color/color-info/:id' element={<ColorInfo />} />
+                        <Route path='/color/update-color/:id' element={<UpdateColor />} />
 
                         <Route path='/product' element={<Product />} />
-                        <Route path='/add-product' element={<AddProduct />} />
-                        <Route path='/product-info/:id' element={<ProductInfo />} />
-                        <Route path='/update-product/:id' element={<UpdateProduct />} />
-                        <Route path='/update-product-image/:id' element={<UpdateProductImage />} />
+                        <Route path='/product/add-product' element={<AddProduct />} />
+                        <Route path='/product/product-info/:id' element={<ProductInfo />} />
+                        <Route path='/product/update-product/:id' element={<UpdateProduct />} />
+                        <Route path='/product/update-product-image/:id' element={<UpdateProductImage />} />
 
                         <Route path='/category' element={<Category />} />
-                        <Route path="/add-category" element={<AddCategory />} />
-                        <Route path="/category-info/:id" element={<CategoryInfo />} />
-                        <Route path="/update-category/:id" element={<UpdateCategory />} />
+                        <Route path="/category/add-category" element={<AddCategory />} />
+                        <Route path="/category/category-info/:id" element={<CategoryInfo />} />
+                        <Route path="/category/update-category/:id" element={<UpdateCategory />} />
+                        <Route path="/category/update-category-images/:id" element={<UpdateCategoryImages />} />
 
                         <Route path="/subcategory" element={<Subcategory />} />
-                        <Route path="/add-subcategory" element={<AddSubcategory />} />
-                        <Route path='/subcategory-info/:id' element={<SubcategoryInfo />} />
-                        <Route path='/update-subcategory/:id' element={<UpdateSubcategory />} />
-                        <Route path='/update-subcategory-images/:id' element={<UpdateSubcategoryImages />} />
+                        <Route path="/subcategory/add-subcategory" element={<AddSubcategory />} />
+                        <Route path='/subcategory/subcategory-info/:id' element={<SubcategoryInfo />} />
+                        <Route path='/subcategory/update-subcategory/:id' element={<UpdateSubcategory />} />
+                        <Route path='/subcategory/update-subcategory-images/:id' element={<UpdateSubcategoryImages />} />
 
-                        <Route path="/specification-info" element={<SpecificationInfo />} />
-                        <Route path="/add-specification" element={<AddSpecification />} />
-                        <Route path='/update-specification/:id' element={<UpdateSpecification />} />
+                        <Route path="/specification" element={<SpecificationInfo />} />
+                        <Route path="/specification/add-specification" element={<AddSpecification />} />
+                        <Route path='/specification/update-specification/:id' element={<UpdateSpecification />} />
 
-                        <Route path='/carousel' element={<CarouselImage/>} />
+                        <Route path='/carousel' element={<CarouselImage />} />
 
                         <Route path='*' element={<ErrorPage />} />
                     </Routes>
@@ -96,3 +100,4 @@ const AdminDashboard = () => {
 }
 
 export default AdminDashboard
+

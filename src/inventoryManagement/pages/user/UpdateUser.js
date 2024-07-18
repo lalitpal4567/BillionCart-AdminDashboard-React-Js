@@ -15,7 +15,8 @@ const UpdateUser = () => {
     })
 
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchUserById = async () => {
         setLoading(true);

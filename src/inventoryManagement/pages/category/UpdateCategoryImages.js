@@ -8,10 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import AlertMessageModal from '../../components/AlertMessageModal';
 import DeleteModal from '../../components/DeleteModal';
 
-const UpdateSubcategoryImages = () => {
+const UpdateCategoryImages = () => {
     const [loading, setLoading] = useState(false);
-    const [subcategoryImages, setSubcategoryImages] = useState([]);
-    const [deleteSubcategoryImageId, setDeleteSubcategoryImageId] = useState(null);
+    const [categoryImages, setCategoryImagess] = useState([]);
+    const [deleteCategoryImageId, setDeleteCategoryImageId] = useState(null);
 
     const [isFileSizeExceeded, setIsFileSizeExceeded] = useState([false]);
     const [isAllFilesSelected, setIsAllFilesSelected] = useState(false);
@@ -25,31 +25,30 @@ const UpdateSubcategoryImages = () => {
 
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
-    // const token = localStorage.getItem('token');
     const token = sessionStorage.getItem('token');
     const { id } = useParams();
 
-    const fetchSubcategoryImages = async () => {
+    const fetchCategoryImages = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:9090/api/v1/noauth/subcategory/get-subcategory-images/${id}`);
+            const res = await axios.get(`http://localhost:9090/api/v1/noauth/category/get-category-images/${id}`);
             setLoading(false);
-            setSubcategoryImages(res.data.SubcategoryImages);
+            setCategoryImagess(res.data.CategoryImages);
         } catch (error) {
             setLoading(false);
-            console.log("Error occurred while fetching subcategory image: ", error);
+            console.log("Error occurred while fetching category image: ", error);
         }
     }
 
     useEffect(() => {
-        fetchSubcategoryImages();
+        fetchCategoryImages();
     }, []);
 
     useEffect(() => {
         checkAllFilesSelected();
     }, [imageFiles]);
 
-    const addSubcategoryimages = async (e) => {
+    const addCategoryImages = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -68,7 +67,7 @@ const UpdateSubcategoryImages = () => {
         });
 
         try {
-            const res = await axios.post(`http://localhost:9090/api/v1/admin/subcategory/add-subcategory-images/${id}`, formData, {
+            const res = await axios.post(`http://localhost:9090/api/v1/admin/category/add-category-images/${id}`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -76,34 +75,34 @@ const UpdateSubcategoryImages = () => {
             })
 
             setLoading(false);
-            toast.success("Subcategory images added successfully!");
-            setTimeout(() => navigate(`/subcategory-info/${id}`), 2000);
+            toast.success("Category images added successfully!");
+            setTimeout(() => navigate(`./admin-dashboard/category-info/${id}`), 2000);
         } catch (error) {
             setLoading(false);
-            console.log("Error occurred while adding subcategory images ", error);
-            toast.error("Error occurred while adding subcategory images");
+            console.log("Error occurred while adding category images ", error);
+            toast.error("Error occurred while adding category images");
         }
     }
 
-    const removeSubcategoryImage = async () => {
+    const removeCategoryImage = async () => {
         setLoading(true);
         try {
-            const res = await axios.delete(`http://localhost:9090/api/v1/admin/subcategory/remove-subcategory-image/${deleteSubcategoryImageId}`, {
+            const res = await axios.delete(`http://localhost:9090/api/v1/admin/category/remove-category-image/${deleteCategoryImageId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
             setLoading(false);
-            toast.success("Subcategory image removed successfully");
+            toast.success("Category image removed successfully");
             handleCloseModal();
         } catch (error) {
             setLoading(false);
-            console.log("Error occurred while removing subcategory image", error);
-            toast.error("Error occurred while removing subcategory image");
+            console.log("Error occurred while removing category image", error);
+            toast.error("Error occurred while removing category image");
         }
     }
 
-    const handleSubcategoryImageAltTextInputChange = (index, e) => {
+    const handleCategoryImageAltTextInputChange = (index, e) => {
         const { type, value, files } = e.target;
         const newImageFiles = [...imageFiles];
         const newAltTexts = [...altTexts];
@@ -134,7 +133,7 @@ const UpdateSubcategoryImages = () => {
     };
 
     const handleDeleteProductImage = (id) => {
-        setDeleteSubcategoryImageId(id);
+        setDeleteCategoryImageId(id);
         setShowDeleteModal(true);
     }
 
@@ -157,7 +156,7 @@ const UpdateSubcategoryImages = () => {
     const handleCloseModal = () => {
         setShowDeleteModal(false);
         setShowAlertModal(false);
-        setDeleteSubcategoryImageId(null);
+        setDeleteCategoryImageId(null);
     }
 
     const handleResetImages = () => {
@@ -170,8 +169,8 @@ const UpdateSubcategoryImages = () => {
     return (
         <div className='p-2 border border-2 border-danger'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/admin-dashboard/subcategory" />
-                <h1 className='mx-auto'>Add Subcategory Images</h1>
+                <BackButton to="/admin-dashboard/category" />
+                <h1 className='mx-auto'>Add Category Images</h1>
             </div>
             {loading ? <Spinner /> :
                 <div className='overflow-y-scroll' style={{ height: "450px" }}>
@@ -182,12 +181,12 @@ const UpdateSubcategoryImages = () => {
                     <DeleteModal
                         show={showDeleteModal}
                         onClose={handleCloseModal}
-                        onConfirm={removeSubcategoryImage}
+                        onConfirm={removeCategoryImage}
                     />
                     <div className=' d-flex justify-content-evenly ' >
                         <div className=' border border-3 border-light-subtle p-2' style={{ width: "50%" }}>
                             {
-                                subcategoryImages.map((image, index) => {
+                                categoryImages.map((image, index) => {
                                     return (
                                         <div key={index} className='d-flex align-items-center justify-content-between border border-2 border-light-subtle '>
                                             <div className='' style={{ height: "130px", width: "200px" }}>
@@ -201,7 +200,7 @@ const UpdateSubcategoryImages = () => {
                         </div>
                         <div>
                             <div className='px-2'>
-                                <form className=' w-100' onSubmit={addSubcategoryimages} >
+                                <form className=' w-100' onSubmit={addCategoryImages} >
                                     <div className="mb-3">
                                         <label className="form-label">Image</label>
                                         <p className='' style={{ fontSize: "12px", color: "red" }}>
@@ -220,7 +219,7 @@ const UpdateSubcategoryImages = () => {
                                                             name="imageFile"
                                                             ref={fileInputRef}
                                                             accept="image/jpg, image/jpeg, image/png"
-                                                            onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
+                                                            onChange={(e) => handleCategoryImageAltTextInputChange(index, e)}
                                                         />
                                                     </div>
                                                     <div className=' d-flex justify-content-between flex-wrap pt-2'>
@@ -233,7 +232,7 @@ const UpdateSubcategoryImages = () => {
                                                                 required
                                                                 name="altText"
                                                                 value={altTexts[index].altText || ""}
-                                                                onChange={(e) => handleSubcategoryImageAltTextInputChange(index, e)}
+                                                                onChange={(e) => handleCategoryImageAltTextInputChange(index, e)}
                                                             />
                                                             {index === 0 && isFileSizeExceeded[index] &&
                                                                 <p className=' text-danger ms-3'>Size exceeded!!!</p>
@@ -272,4 +271,4 @@ const UpdateSubcategoryImages = () => {
     )
 }
 
-export default UpdateSubcategoryImages
+export default UpdateCategoryImages

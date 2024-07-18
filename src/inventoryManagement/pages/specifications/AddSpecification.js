@@ -16,7 +16,8 @@ const AddSpecification = () => {
     const [specificationNames, setSpecificationNames] = useState([]);
     const [newSpec, setNewSpec] = useState("");
 
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const navigate = useNavigate();
 
     const fetchCategories = async () => {
@@ -74,7 +75,7 @@ const AddSpecification = () => {
             });
             setLoading(false);
             toast.success("Specification added successfully");
-            setTimeout(() => navigate("/specification-info"), 2000);
+            setTimeout(() => navigate("../specification"), 2000);
         } catch (error) {
             console.log("Error submitting specifications", error);
             toast.error("Error while adding specifications");
@@ -111,7 +112,7 @@ const AddSpecification = () => {
     return (
         <div className='p-2'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/specification-info" />
+                <BackButton to="/admin-dashboard/specification" />
                 <h1 className='mx-auto'>Add Product Specification</h1>
             </div>
             <div className='p-3'>

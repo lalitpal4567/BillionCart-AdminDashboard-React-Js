@@ -14,7 +14,7 @@ const AddBrand = () => {
     const [newBrand, setNewBrand] = useState("");
 
 
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const navigate = useNavigate();
 
 
@@ -31,7 +31,7 @@ const AddBrand = () => {
             });
             setLoading(false);
             toast.success("Brand added successfully");
-            setTimeout(() => navigate("/brand"), 2000);
+            setTimeout(() => navigate("/admin-dashboard/brand"), 2000);
         } catch (error) {
             console.log("Error while adding brand", error);
             toast.error("Error while adding brand");
@@ -57,7 +57,7 @@ const AddBrand = () => {
     return (
         <div className='p-2'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/brand" />
+                <BackButton to="/admin-dashboard/brand" />
                 <h1 className='mx-auto'>Add Brand</h1>
             </div>
             <div className='p-3'>

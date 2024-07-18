@@ -24,7 +24,7 @@ const Color = () => {
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 5;
 
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
 
     const fetchColors = async () => {
         setLoading(true);
@@ -60,7 +60,7 @@ const Color = () => {
         <div className='p-2'>
             <h1 className=' text-center'>Color Management</h1>
             <div className=' p-3'>
-                <AddButton btnName="Add Color" pathlink="/add-color" />
+                <AddButton btnName="Add Color" pathlink="/admin-dashboard/color/add-color" />
                 {loading ? <Spinner /> :
                     <div className='pt-3'>
                         <form>
@@ -82,8 +82,8 @@ const Color = () => {
                                                     <td>{productColor.name}</td>
                                                     <td>
                                                         <div className='d-flex justify-content-between'>
-                                                            <Link to={`/color-info/${productColor.id}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
-                                                            <Link to={`/update-color/${productColor.id}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
+                                                            <Link to={`/admin-dashboard/color/color-info/${productColor.id}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                                                            <Link to={`/admin-dashboard/color/update-color/${productColor.id}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
                                                         </div>
                                                     </td>
                                                 </tr>

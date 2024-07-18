@@ -20,7 +20,8 @@ const User = () => {
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 5;
 
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -58,7 +59,7 @@ const User = () => {
         <div className='p-2'>
             <h1 className=' text-center'>User Management</h1>
             <div className=' p-3'>
-                <AddButton btnName="Add Category" pathlink="/add-category" />
+                <AddButton btnName="Add Category" pathlink="/admin-dashboard/add-category" />
                 {loading ? <Spinner /> :
                     <div className='pt-3'>
                         <form>
@@ -89,7 +90,7 @@ const User = () => {
                                                     <td className='' >{user.userNonEnabled ? "Enabled" : "Disabled"}</td>
                                                     <td>
                                                         <div className='d-flex justify-content-between'>
-                                                            <Link to={`/user-info/${user.accountId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                                                            <Link to={`../user/user-info/${user.accountId}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
                                                         </div>
                                                     </td>
                                                 </tr>

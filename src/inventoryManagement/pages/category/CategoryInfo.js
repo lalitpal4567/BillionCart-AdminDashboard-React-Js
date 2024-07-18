@@ -26,15 +26,6 @@ const CategoryInfo = () => {
     }
   }
 
-  const handleCopyImageUrl = () => {
-    if (category.imageUrl) {
-      navigator.clipboard.writeText(category.imageUrl);
-      setisUrlCopied(true);
-      setTimeout(() => {
-        setisUrlCopied(false);
-      }, 2000);
-    }
-  }
   useEffect(() => {
     fetchCategoryById();
   }, [])
@@ -42,7 +33,7 @@ const CategoryInfo = () => {
   return (
     <div className='p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/category" />
+        <BackButton to="/admin-dashboard/category" />
         <h1 className='mx-auto'>Category Information</h1>
       </div>
       {
@@ -63,24 +54,37 @@ const CategoryInfo = () => {
                   <td colSpan="2">{category.description}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Image</th>
-                  <td className=' d-flex justify-content-start gap-4'>
-                    <div className=' overflow-hidden ' style={{ width: "200px", height: "100px" }}>
-                      <img src={category.imageUrl} className=' w-100 h-100 object-fit-fill' />
-                    </div>
-                    <div className=' d-flex flex-column justify-content-between'>
-                      {
-                        isUrlCopied &&
-                        <div className=' bg-info rounded-3 px-2 py-1 align-bottom'>
-                          <p className=' fw-medium m-0' style={{ fontSize: "12px" }}>Url copied</p>
-                        </div>
-                      }
-                      <div className=' mt-auto'>
-                        <FaCopy className=' fs-4' onClick={handleCopyImageUrl} />
-                        <span className=' fw-medium ms-2' style={{ fontSize: "12px"}}>Copy Url</span>
-                      </div>
-                    </div>
+                  <th scope="row">Images</th>
+                  <td className='d-flex justify-content-start gap-2 flex-wrap'>
+                    {
+                      category?.images?.map((image, index) => {
+                        return (
+                          <div key={index} className=' overflow-hidden ' style={{ width: "150px", height: "70px" }}>
+                            <img
+                              src={image.imageUrl}
+                              alt={image.altText}
+                              className=' w-100 h-100 object-fit-cover' />
+                          </div>
+                        )
+                      })
+                    }
                   </td>
+                </tr>
+                <tr>
+                  <th>Created At</th>
+                  <td>{category?.createdAt}</td>
+                </tr>
+                <tr>
+                  <th>Updated At</th>
+                  <td>{category?.updatedAt}</td>
+                </tr>
+                <tr>
+                  <th>Created By</th>
+                  <td>{category?.createdBy}</td>
+                </tr>
+                <tr>
+                  <th>Updated By</th>
+                  <td>{category?.updatedBy}</td>
                 </tr>
               </tbody>
             </table>
@@ -88,7 +92,7 @@ const CategoryInfo = () => {
       }
       <section className=' p-2 d-flex justify-content-center gap-3'>
         <button className='btn btn-danger px-4'>Delete</button>
-        <Link to={`/update-category/${category.categoryId}`} className='btn btn-info px-4'>Update</Link>
+        <Link to={`/admin-dashboard/category/update-category/${category.categoryId}`} className='btn btn-info px-4'>Update</Link>
       </section>
     </div>
   )

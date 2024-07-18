@@ -13,7 +13,8 @@ const ProductInfo = () => {
 
   const { id } = useParams();
 
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const fetchProductById = async () => {
     setLoading(true);
@@ -25,6 +26,10 @@ const ProductInfo = () => {
   useEffect(() => {
     fetchProductById();
   }, [])
+
+  useEffect(() =>{
+    console.log("china", product);
+  }, [product])
 
   const handleConfirmDelete = async () => {
     try {
@@ -51,7 +56,7 @@ const ProductInfo = () => {
   return (
     <div className=' p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/product" />
+        <BackButton to="/admin-dashboard/product" />
         <h1 className='mx-auto'>Product Information</h1>
       </div>
       {
@@ -106,12 +111,20 @@ const ProductInfo = () => {
                   <td colSpan="2">{product.quantity}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Current Price</th>
-                  <td colSpan="2">{product.currentPrice}</td>
+                  <th scope="row">Price</th>
+                  <td colSpan="2">{product.price}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Previous Price</th>
-                  <td colSpan="2">{product.previousPrice}</td>
+                  <th scope="row">Active</th>
+                  <td colSpan="2">{product.active ? "true" : "false"}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Offer</th>
+                  <td colSpan="2">{product.offerPercentage}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Offer Ends in</th>
+                  <td colSpan="2">{product.offerEndDate}</td>
                 </tr>
                 <tr>
                   <th scope="row">Image Url</th>
@@ -139,7 +152,7 @@ const ProductInfo = () => {
             </table>
             <section className=' p-2 d-flex justify-content-center gap-3'>
               <button className='btn btn-danger px-4'>Delete</button>
-              <Link to={`/update-product/${product.productId}`} className='btn btn-info px-4'>Update</Link>
+              <Link to={`/admin-dashboard/product/update-product/${product.productId}`} className='btn btn-info px-4'>Update</Link>
             </section>
           </div>
       }

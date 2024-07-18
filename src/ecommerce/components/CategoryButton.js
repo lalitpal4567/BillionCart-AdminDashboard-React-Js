@@ -1,14 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const CategoryButton = ({category}) => {
+const CategoryButton = ({category, keyIndex}) => {
     return (
         <div className=' p-2 text-center'>
             <div className=' overflow-hidden' style={{ height: "70px", weight: "70px" }}>
                 <img
-                    src={category.imageUrl}
+                    src={category.images[0].imageUrl}
                     className=" object-fit-contain w-100 h-100"
-                    alt={category.altText}
+                    alt={category.images.altText}
                 />
             </div>
             <div className="">
@@ -19,8 +19,8 @@ const CategoryButton = ({category}) => {
                     {
                         category.subcategories.map((subcategory, index) =>{
                             return (
-                                <li className=''>
-                                    <Link to="###" className="dropdown-item" href="#">{subcategory.name}</Link>
+                                <li key={`${keyIndex}-${index}`} className=''>
+                                    <Link to="###" className="dropdown-item">{subcategory.name}</Link>
                                 </li>
                             )
                         })

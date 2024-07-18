@@ -14,7 +14,7 @@ const UpdateSubcategory = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const fetchSubcategoryById = async () => {
     setLoading(true);
@@ -54,7 +54,7 @@ const UpdateSubcategory = () => {
       });
       setLoading(false);
       toast.success("Subcategory updated successfully!");
-      setTimeout(() => navigate("/subcategory"), 2000);
+      setTimeout(() => navigate("/admin-dashboard/subcategory"), 2000);
     } catch (error) {
       console.error("Error while updating subcategory:", error);
       toast.error("Error while updating subcategory");
@@ -77,7 +77,7 @@ const UpdateSubcategory = () => {
   return (
     <div className='p-2'>
       <div className='d-flex justify-content-center'>
-        <BackButton to="/subcategory" />
+        <BackButton to="/admin-dashboard/subcategory" />
         <h1 className='mx-auto'>Update Subcategory</h1>
       </div>
       {loading ? <Spinner /> :
@@ -134,7 +134,7 @@ const UpdateSubcategory = () => {
               />
             </div>
             <div className='d-flex justify-content-center gap-4'>
-              <Link to={`/update-subcategory-images/${id}`} className="btn btn-info px-4">Update Images</Link>
+              <Link to={`/admin-dashboard/subcategory/update-subcategory-images/${id}`} className="btn btn-info px-4">Update Images</Link>
               <button type="button" className="btn px-4" onClick={handleReset} style={{ backgroundColor: "orange" }}>Reset</button>
               <button type="submit" className="btn btn-success px-4">Submit</button>
             </div>

@@ -1,0 +1,12 @@
+.submit-btn{
+    background-color: #9be1ef;
+}
+.submit-btn:hover{
+    background-color: #03AED2;
+}
+.highlight{
+    background-color: #FFA62F;
+    color: white;
+    transition: all 0.2s;
+    font-weight: bold;
+}

@@ -12,7 +12,8 @@ const UserInfo = () => {
     const [showModal, setShowModal] = useState(false);
 
     const { id } = useParams();
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchUserById = async () => {
         setLoading(true);
@@ -48,7 +49,7 @@ const UserInfo = () => {
     return (
         <div className=' p-2'>
             <div className='d-flex justify-content-center'>
-                <BackButton to="/user" />
+                <BackButton to="/admin-dashboard/user" />
                 <h1 className='mx-auto'>User Information</h1>
             </div>
             {

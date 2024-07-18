@@ -23,7 +23,8 @@ const Brand = () => {
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 5;
 
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     const fetchBrands = async () => {
         setLoading(true);
@@ -83,7 +84,7 @@ const Brand = () => {
         <div className='p-2'>
             <h1 className=' text-center'>Brand Management</h1>
             <div className=' p-3'>
-                <AddButton btnName="Add Brand" pathlink="/add-brand" />
+                <AddButton btnName="Add Brand" pathlink="/admin-dashboard/brand/add-brand" />
                 {loading ? <Spinner /> :
                     <div className='pt-3'>
                         <DeleteModal
@@ -110,8 +111,8 @@ const Brand = () => {
                                                     <td>{productBrand.name}</td>
                                                     <td>
                                                         <div className='d-flex justify-content-between'>
-                                                            <Link to={`/brand-info/${productBrand.id}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
-                                                            <Link to={`/update-brand/${productBrand.id}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
+                                                            <Link to={`/admin-dashboard/brand/brand-info/${productBrand.id}`}><IoInformationCircleSharp className=' fs-4 text-info' /></Link>
+                                                            <Link to={`/admin-dashboard/brand/update-brand/${productBrand.id}`}><RiEdit2Fill className='fs-4 text-success' /></Link>
                                                             <AiFillDelete onClick={() => handleDeleteBrandId(productBrand.id)} className='fs-4 text-danger' />
                                                         </div>
                                                     </td>
