@@ -4,45 +4,25 @@ import './ShoppingCartPage.css'
 
 
 import { Link} from 'react-router-dom';
-import axios from 'axios';
 import CartItemCard from '../components/CartItemCard';
 import Footer from '../components/Footer';
+import useCartItems from '../components/FetchCartItems';
 
 const ShoppingCartPage = () => {
-    const [cartItems, setCartItems] = useState([]);
-    const markedItems = cartItems.filter(item => item.isSelectedForOrder === true);
-    const savedItems = cartItems.filter(item => item.isSelectedForOrder === false);
-    const totalCartItems = cartItems.length;
+    const {cartItems,markedItems, savedItems, fetchCartItems} = useCartItems();
 
-    const token = localStorage.getItem("token");
-
-    const fetchCartItems = async () => {
-        try {
-            const res = await axios.get("http://localhost:9090/api/v1/user/cart/cartItems", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-            setCartItems(res.data.CartItems);
-        } catch (error) {
-            console.log("error", error);;
-        }
+    const calculateTotalAmount = () =>{
+        const amount = markedItems.reduce((total, item) => total + item.price, 0);
+        return amount;
     }
 
-    useEffect(() => {
-        fetchCartItems();
-    }, []);
-
-    useEffect(() =>{
-        fetchCartItems();
-    }, [cartItems, markedItems, savedItems]);
-
+ 
     return (
         <>
-            <Navbar totalItems={totalCartItems} />
-            <div className=' container-fluid' style={{ paddingTop: "60px" }}>
-                <div className='row'>
-                    <div className='col-9 border border-2 border-danger py-3'>
+            <Navbar />
+            <div className=' container-fluid' style={{ paddingTop: "60px"}}>
+                <div className='row' style={{paddingBottom: "400px"}}>
+                    <div className='col-9 py-3' >
                         {
                             markedItems.length > 0 &&
                             <div>
@@ -70,12 +50,12 @@ const ShoppingCartPage = () => {
                             </div>
                         }
                     </div>
-                    <div className='col border border-2 border-success '>
+                    <div className='col  '>
                         <div className=' sticky-element'>
                             <h4>Amount Details</h4>
                             <div className=' d-flex justify-content-between fw-bolder fs-5'>
                                 <p>Total Amount</p>
-                                <p>8599</p>
+                                <p>{calculateTotalAmount()}</p>
                             </div>
                             <Link to="/checkout" type="button" className=" text-decoration-none py-3 fw-bold text-white w-100 text-center" style={{ backgroundColor: "#FFA62F" }}>PLACE ORDER</Link>
                         </div>

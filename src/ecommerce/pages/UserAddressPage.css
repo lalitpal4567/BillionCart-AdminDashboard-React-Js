@@ -1,0 +1,21 @@
+.location-details {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 3;
+    height: 4.5em;
+    line-height: 1.5em;
+}
+
+.full-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 1;
+    height: 1.5em;
+    line-height: 1.5em;
+}

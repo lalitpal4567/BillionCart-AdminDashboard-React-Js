@@ -5,6 +5,7 @@ import { Link, Route, Routes } from 'react-router-dom'
 import UserAddressPage from './UserAddressPage'
 import ProfileInformation from './ProfileInformation'
 import AddNewAddress from './AddNewAddress'
+import UpdateExistingAddress from './UpdateExistingAddress'
 
 const MyProfilePage = () => {
   return (
@@ -24,7 +25,8 @@ const MyProfilePage = () => {
             <Routes>
               <Route path="/" element={<ProfileInformation/>}/>
               <Route path="/add-new-address" element={<AddNewAddress/>}/>
-              <Route path="/user-address" element={<UserAddressPage/>}/>
+              <Route path="/user-address/*" element={<UserAddressPage/>}/>
+              <Route path="/user-address/update-user-address/:id" element={<UpdateExistingAddress/>}/>
             </Routes>
           </div>
         </div>

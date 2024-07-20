@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUserLarge } from "react-icons/fa6";
 import "./Navbar.css"
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from './UserAuthentication';
+import axios from 'axios';
+import useCartItems from './FetchCartItems';
 
-const Navbar = ({ totalItems }) => {
+const Navbar = () => {
     const { isAuthenticated, redirectToSignIn } = useAuth();
     const navigate = useNavigate();
 
@@ -22,11 +24,18 @@ const Navbar = ({ totalItems }) => {
         }
     };
 
+    const {markedItems, fetchCartItems} = useCartItems();
+    console.log("lekjr", markedItems);
+
+    useEffect(() =>{
+        fetchCartItems();
+    }, [])
+
     return (
         <nav className=" bg-body-tertiary py-2 fixed-element" style={{ width: "100%" }}>
             <div className="container-fluid">
                 <div className=' navbar-container'>
-                    <Link to="/homepage" className=" flex-item">
+                    <Link to="/" className=" flex-item">
                         <div className=' overflow-hidden' style={{ height: "50px", width: "200px" }}>
                             <img src='/images/billioncart_logo.png' className=' object-fit-cover w-100 h-100' />
                         </div>
@@ -51,9 +60,9 @@ const Navbar = ({ totalItems }) => {
                         <button type="button" className="border-0 bg-transparent position-relative" style={{ color: "#03AED2" }} onClick={() => handleUserRedirect("/shopping-cart")}>
                             <FaCartShopping className='' style={{ fontSize: "25px" }} /><span className=' fw-bold ms-2 d-none d-lg-inline'>Cart</span>
                             {
-                                totalItems > 0 &&
+                                markedItems.length > 0 &&
                                 <span className="position-absolute start-50 translate-middle badge rounded-pill bg-danger" style={{ top: "-3px" }}>
-                                    {totalItems}
+                                    {markedItems.length}
                                 </span>
                             }
                         </button>

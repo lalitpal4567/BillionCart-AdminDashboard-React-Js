@@ -7,6 +7,7 @@ import ImageViewer from '../components/ImageViewer';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../components/Footer';
+import useCartItems from '../components/FetchCartItems';
 
 const ProductInformation = () => {
     const [product, setProduct] = useState(null);
@@ -24,22 +25,27 @@ const ProductInformation = () => {
         }
     }
 
-    const addProductToCart = async(productId) =>{
-        console.log("product cart");
-        try {
-            const res = await axios.post(`http://localhost:9090/api/v1/user/cart/add-product-to-cart/${productId}`,{}, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                  }
-            });
-            setTimeout(() =>{
-                navigate("/shopping-cart")
-            }, 2000);
-        } catch (error) {
-            console.log("error", error);
-        }
-    }
+    const { addProductToCart } = useCartItems();
+
+    const handleAddProductToCart = (id) => {
+        addProductToCart(id);
+    };
+    // const addProductToCart = async(productId) =>{
+    //     console.log("product cart");
+    //     try {
+    //         const res = await axios.post(`http://localhost:9090/api/v1/user/cart/add-product-to-cart/${productId}`,{}, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //               }
+    //         });
+    //         setTimeout(() =>{
+    //             navigate("/shopping-cart")
+    //         }, 2000);
+    //     } catch (error) {
+    //         console.log("error", error);
+    //     }
+    // }
 
     useEffect(() => {
         fetchProduct();
@@ -57,7 +63,7 @@ const ProductInformation = () => {
                             />
                             <div className="row">
                                 <div className=' d-flex justify-content-evenly py-2 mt-4'>
-                                    <button type='button' className='px-5 py-2 border-0  fw-bolder text-white add-to-cart-btn' onClick={() => addProductToCart(product?.productId)}>ADD TO CART</button>
+                                    <button type='button' className='px-5 py-2 border-0  fw-bolder text-white add-to-cart-btn' onClick={() => handleAddProductToCart(product?.productId)}>ADD TO CART</button>
                                     <button type='button' className=' px-xl-5 py-2  border-0  fw-bolder text-white buy-now-btn'>BUY NOW</button>
                                 </div>
                             </div>
@@ -69,7 +75,8 @@ const ProductInformation = () => {
                             <FaStar className='fs-1' style={{ color: "#FFA62F" }} />
                             <span className=' fw-semibold star-rating-position'>4.3</span>
                         </div>
-                        <PriceTag className=" fs-2" currentPrice={product?.currentPrice} previousPrice={product?.previousPrice} />
+                        {/* <PriceTag className=" fs-2" currentPrice={product?.currentPrice} previousPrice={product?.previousPrice} /> */}
+                        <PriceTag className=" fs-2" currentPrice={1000} previousPrice={5000} />
                         <div className=' mt-3 w-50'>
                             <table className=' table table-borderless'>
                                 <caption className=' caption-top'>Specifications</caption>

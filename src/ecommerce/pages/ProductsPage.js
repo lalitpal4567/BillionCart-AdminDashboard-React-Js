@@ -99,10 +99,10 @@ const ProductsPage = () => {
     return (
         <div>
             <Navbar />
-            <div className="container-fluid border border-2 border-black" style={{paddingTop: "60px"}}>
+            <div className="container-fluid " style={{paddingTop: "60px"}}>
                 <div className="container-fluid row">
-                    <div className="col border border-2 border-black">
-                        <div className=' border border-2 border-danger'>
+                    <div className="col ">
+                        <div className=''>
                             <SidebarFilter
                                 availableBrands={availableBrands}
                                 availableColors={availableColors}

@@ -4,9 +4,11 @@ import { TiArrowDownThick } from "react-icons/ti";
 import { TiArrowUpThick } from "react-icons/ti";
 import PriceTag from './PriceTag';
 import axios from 'axios';
+import useCartItems from './FetchCartItems';
 
 const CartItemCard = ({ cartItem, sectionName }) => {
     const [currentQuantity, setCurrentQuantity] = useState(cartItem.quantity);
+    const { removeCartItemFromCart, fetchCartItems } = useCartItems();
 
     const token = localStorage.getItem("token");
 
@@ -20,6 +22,7 @@ const CartItemCard = ({ cartItem, sectionName }) => {
                     quantity: newQuantity
                 }
             })
+            fetchCartItems();
         } catch (error) {
             console.log("error", error);
         }
@@ -39,23 +42,19 @@ const CartItemCard = ({ cartItem, sectionName }) => {
                     "Authorization": `Bearer ${token}`
                 }
             })
+            fetchCartItems(); // Re-fetch cart items after toggling selection for order
         } catch (error) {
             console.log("error", error);
         }
     }
 
-    const removeCartItemFromCart = async () => {
-        try {
-            const res = await axios.delete(`http://localhost:9090/api/v1/user/cart/remove-cart-item/${cartItem.cartItemId}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-        } catch (error) {
-            console.log("error", error);
-        }
-    }
+    // const {removeCartItemFromCart} = useCartItems();
 
+
+    const handleRemoveCartItemFromCart = (id) =>{
+        removeCartItemFromCart(id);
+    }
+   
     const addProductToWishlist = async () =>{
         try {
             const res = await axios.post(`http://localhost:9090/api/v1/user/wishlist/add-wishlist-item/${cartItem.productId}`, {}, {
@@ -63,7 +62,7 @@ const CartItemCard = ({ cartItem, sectionName }) => {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            removeCartItemFromCart();
+            removeCartItemFromCart(cartItem.cartItemId);
         } catch (error) {
             console.log("error", error);
         }
@@ -98,7 +97,8 @@ const CartItemCard = ({ cartItem, sectionName }) => {
                     <div class="card-body">
                         <h5 className="card-title">{cartItem.name}</h5>
                         <p className="description-text fs-5">{cartItem.description}</p>
-                        <PriceTag className="" currentPrice={cartItem.currentPrice} previousPrice={cartItem.previousPrice} />
+                        {/* <PriceTag className="" currentPrice={cartItem.currentPrice} previousPrice={cartItem.previousPrice} /> */}
+                        <PriceTag className="" currentPrice={1000} previousPrice={5000} />
                         <span className=' mt-3 d-inline-block'>
                             <button type='button' className='quantity-btn'><TiArrowDownThick className=' fs-5' style={{ color: "#FFA62F" }} onClick={() => handleDecreaseQuantity()} /></button>
                             <input
@@ -111,7 +111,7 @@ const CartItemCard = ({ cartItem, sectionName }) => {
                             <button type="button" className=' quantity-btn'><TiArrowUpThick className=' fs-5' style={{ color: "#03AED2" }} onClick={() => handleIncreaseQuantity()} /></button>
                         </span>
                         <div className=' d-flex justify-content-between  mt-3'>
-                            <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#FFA62F" }} onClick={removeCartItemFromCart}>REMOVE FROM CART</button>
+                            <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#FFA62F" }} onClick={() => handleRemoveCartItemFromCart(cartItem.cartItemId)}>REMOVE FROM CART</button>
                             <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#03AED2" }} onClick={handleToggleMarkCartItemForOrder}>{sectionName}</button>
                             <button type="button" className=' py-2 px-3 fw-bold border-0 text-white' style={{ backgroundColor: "#03AED2" }} onClick={addProductToWishlist}>MOVE TO WISHLIST</button>
                         </div>

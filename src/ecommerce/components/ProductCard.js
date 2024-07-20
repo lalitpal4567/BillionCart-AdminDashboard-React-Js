@@ -20,7 +20,8 @@ const ProductCard = ({product}) => {
                 <div className={`card-body ${onHover ? "hide-over-hover" : ""}`}>
                     <h5 className="">{product.brand.brand}</h5>
                     <p className={`card-text ${onHover ? " d-none" : ""}`}>{product.description}</p>
-                    <PriceTag className={`${onHover ? " d-none" : ""}`} currentPrice={product.currentPrice} previousPrice={product.previousPrice} />
+                    {/* <PriceTag className={`${onHover ? " d-none" : ""}`} currentPrice={product.currentPrice} previousPrice={product.previousPrice} /> */}
+                    <PriceTag className={`${onHover ? " d-none" : ""}`} currentPrice={1000} previousPrice={5000} />
                 </div>
                 {
                     onHover &&

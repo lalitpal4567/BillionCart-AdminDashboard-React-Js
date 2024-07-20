@@ -1,30 +1,39 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const AddNewAddress = () => {
+const UpdateExistingAddress = () => {
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState('');
-    const [address, setAddress] = useState({
-        fullName: "",
-        mobileNo: "",
-        locationDetails: "",
-        city: "",
-        state: "",
-        country: "",
-        pincode: ""
-    })
-
+    const [address, setAddress] = useState({});
+    const [initialAddress, setInitialAddress] = useState({});
+    const {id} = useParams();
+    
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    
+    const fetchExistingUserAddress = async() =>{
+        try {
+            const res = await axios.get(`http://localhost:9090/api/v1/user/address/get-address/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "Application/json"
+                }
+            })
+            setAddress(res.data.Address);
+            setInitialAddress(res.data.Address);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
 
-    const handleAddNewAddress = async (e) => {
+    const handleUpdateExistingAddress = async (e) => {
         e.preventDefault();
-
+        
         console.log("lon", address);
         try {
-            const res = await axios.post("http://localhost:9090/api/v1/user/address/add-address", address, {
+            const res = await axios.put("http://localhost:9090/api/v1/user/address/update-address", address, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "Application/json"
@@ -35,20 +44,20 @@ const AddNewAddress = () => {
             console.log("error", error);
         }
     }
-
-    const fetchCountries = async () => {
-        try {
-            const response = await axios.get('https://api.countrystatecity.in/v1/countries', {
-                headers: {
-                    'X-CSCAPI-KEY': 'UXNXU1RNVGZ3c1BETGQzSElPandmYVZsOWNpQnJMbFduVW0zVldxSQ=='
-                }
-            });
-            setCountries(response.data);
-        } catch (error) {
-            console.error('Error fetching countries:', error);
-        }
-    };
-
+    
+    // const fetchCountries = async () => {
+    //     try {
+    //         const response = await axios.get('https://api.countrystatecity.in/v1/countries', {
+    //             headers: {
+    //                 'X-CSCAPI-KEY': 'UXNXU1RNVGZ3c1BETGQzSElPandmYVZsOWNpQnJMbFduVW0zVldxSQ=='
+    //             }
+    //         });
+    //         setCountries(response.data);
+    //     } catch (error) {
+    //         console.error('Error fetching countries:', error);
+    //     }
+    // };
+    
     const fetchStates = async (iso2) => {
         try {
             const response = await axios.get(`https://api.countrystatecity.in/v1/countries/${iso2}/states`, {
@@ -63,25 +72,18 @@ const AddNewAddress = () => {
     };
 
     useEffect(() => {
-        fetchCountries();
+        // fetchCountries();
+        fetchExistingUserAddress();
     }, []);
 
-    useEffect(() => {
-        if (selectedCountry) {
-            fetchStates(selectedCountry);
-        } else {
-            setStates([]);
-        }
-    }, [selectedCountry]);
+    // useEffect(() => {
+    //     if (selectedCountry) {
+    //         fetchStates(selectedCountry);
+    //     } else {
+    //         setStates([]);
+    //     }
+    // }, [selectedCountry]);
 
-    const handleCountryChange = (event) => {
-        setSelectedCountry(event.target.value);
-
-        setAddress({
-            ...address,
-            country: event.target.value
-        });
-    };
 
     const handleAddressInputChange = (event) => {
         const { name, value } = event.target;
@@ -90,19 +92,22 @@ const AddNewAddress = () => {
             [name]: value
         });
     };
-
-
+    
+    const handleResetAddress = () =>{
+        setAddress(initialAddress);
+    }
+    
     return (
-        <form onSubmit={handleAddNewAddress} className="row g-3">
+        <form onSubmit={handleUpdateExistingAddress} className="row g-3">
             <div className="colmd-12">
                 <label htmlFor="inputCountry4" className="form-label">Country</label>
                 <select
                     className="form-select"
                     id="inputCountry"
-                    onChange={handleCountryChange}
-                    value={address.country}
+                    value={address?.country}
+                    disabled
                     name="country"
-                >
+                    >
                     <option defaultValue>Select Country...</option>
                     {countries.map(country => (
                         <option key={country.name} value={country.iso2}>{country.name}</option>
@@ -117,9 +122,9 @@ const AddNewAddress = () => {
                     id="inputFullName4"
                     required
                     name="fullName"
-                    value={address.fullName}
+                    value={address?.fullName}
                     onChange={handleAddressInputChange}
-                />
+                    />
             </div>
             <div className="col-md-6">
                 <label htmlFor="inputMobile4" className="form-label">Mobile no.</label>
@@ -129,12 +134,12 @@ const AddNewAddress = () => {
                     id="inputMobile4"
                     required
                     name="mobileNo"
-                    value={address.mobileNo}
+                    value={address?.mobileNo}
                     onChange={handleAddressInputChange}
-                />
+                    />
             </div>
             <div className="col-12">
-                <label htmlFor="inputAddress" className="form-label">Area / Street / Sector / Village</label>
+                <label htmlFor="inputAddress" className="form-label">Area / Street / locality / landmark / Sector / Village</label>
                 <input
                     type="text"
                     className="form-control"
@@ -142,9 +147,9 @@ const AddNewAddress = () => {
                     placeholder="1234 Main St"
                     required
                     name="locationDetails"
-                    value={address.locationDetails}
+                    value={address?.locationDetails}
                     onChange={handleAddressInputChange}
-                />
+                    />
             </div>
             <div className="col-md-6">
                 <label htmlFor="inputCity" className="form-label">City</label>
@@ -154,7 +159,7 @@ const AddNewAddress = () => {
                     id="inputCity"
                     required
                     name="city"
-                    value={address.city}
+                    value={address?.city}
                     onChange={handleAddressInputChange}
                 />
             </div>
@@ -165,7 +170,7 @@ const AddNewAddress = () => {
                     id="inputState"
                     required
                     name="state"
-                    value={address.state}
+                    value={address?.state}
                     onChange={handleAddressInputChange}>
 
                     <option defaultValue>Select State/Province...</option>
@@ -181,15 +186,16 @@ const AddNewAddress = () => {
                     className="form-control"
                     id="inputZip"
                     name="pincode"
-                    value={address.pincode}
+                    value={address?.pincode}
                     onChange={handleAddressInputChange}
-                />
+                    />
             </div>
             <div className="col-12">
-                <button type="submit" className="btn btn-primary">Add</button>
+                <button type="button" className="btn btn-primary px-4 me-3" onClick={handleResetAddress}>Reset</button>
+                <button type="submit" className="btn btn-primary px-4 ">Add</button>
             </div>
         </form>
     )
 }
 
-export default AddNewAddress
+export default UpdateExistingAddress

@@ -26,7 +26,8 @@ const CategoryCard = ({keyIndex, category}) => {
                 {
                     subcategories.map((subcategory, index) =>{
                         return (
-                            <SubcategoryCard keyIndex={`${(keyIndex + index) * 1000}`} subcatImage={subcategory.subcategoryImages} subcatId={subcategory.subcategoryId}/>
+                            // <SubcategoryCard keyIndex={`${(keyIndex + index) * 1000}`} subcatImage={subcategory.subcategoryImages} subcatId={subcategory.subcategoryId}/>
+                            <SubcategoryCard keyIndex={`${(keyIndex + index) * 1000}`} subcategory={subcategory}/>
                         )
                     })
                 }

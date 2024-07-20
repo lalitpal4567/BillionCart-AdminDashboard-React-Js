@@ -8,7 +8,7 @@ const SidebarFilter = ({ availableBrands, availableColors, handleBrandSelect, ha
   ];
 
   return (
-    <div className='border border-2 border-danger'>
+    <div className=''>
       {filterCollection.map((filter, index) => (
         <ProductFilter
           key={index}
